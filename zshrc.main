@@ -1,0 +1,34 @@
+autoload -Uz compinit && compinit
+autoload -Uz promptinit && promptinit && prompt bart
+
+# Don't record commands entered starting with a space
+setopt HIST_IGNORE_SPACE
+# Immediately append history
+setopt INC_APPEND_HISTORY
+
+PROMPT="%189>..>%{%F{red}%}%n@%m%b%f%k%9(v. . %{%F{blue}%}%(?.[.%20(?.[%U.%S[))%7v%(?.].%20(?.%u].]%s))%b%f%k )%{%F{default}%}%8~%b%f%k%<<%8v%174(l. . %{%F{default}%}%D%b%f%k)%182(l.. %{%F{red}%}%@%b%f%k)%9(v.
+%{%F{blue}%}%(?.[.%20(?.[%U.%S[))%7v%(?.].%20(?.%u].]%s))%b%f%k.)
+%# "
+
+
+
+# # Custom functions and aliases
+
+function napropos () {
+	npm run | grep $1 -A 1
+}
+alias nr='npm run'
+alias g='git'
+alias v='nvim'
+alias readyit='time ( npm run format && npm run lint:ts:fix && npm run test:all ) ; say -v Karen task finished'
+alias testit='time npm run test:all; say -v Karen task finished'
+alias format='time ( npm run format && npm run lint:ts:fix ) ; say -v Karen task finished'
+export SBT_OPTS="-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=8080 -Duser.timezone=UTC"
+#export HUSKY=0
+
+# Calypso Required Settings
+export NODE_OPTIONS=--max-old-space-size=24576
+export CHROMEDRIVER_SKIP_DOWNLOAD=false
+# This one is annoying 
+export PUPPETEER_SKIP_DOWNLOAD=false
+
