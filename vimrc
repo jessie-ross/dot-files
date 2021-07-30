@@ -28,6 +28,9 @@ set clipboard=unnamed
 set winminwidth=0 winminheight=0
 set ttyfast lazyredraw
 
+" set splitbelow
+" set splitright
+
 set scrolloff=10
 "set colorcolumn=81
 
@@ -63,6 +66,8 @@ set directory=~/.vim-tmp/swap/
 " Installation:
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 " 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"
+" Run :PlugInstall to install these
 "
 " Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
