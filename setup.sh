@@ -18,3 +18,4 @@ ln -sh "${SCRIPT_DIR}/zshrc.main" ~/.zshrc.main
 
 # # Git
 ln -sh "${SCRIPT_DIR}/gitconfig" ~/.gitconfig
+ln -sh "${SCRIPT_DIR}/gitignore.global" ~/.gitignore.global

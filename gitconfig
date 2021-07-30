@@ -4,6 +4,8 @@
 	email = j@scjr.me
 [includeIf "gitdir:~/code/"]
 	path = ~/code/.gitconfig
+[core]
+    excludesfile = ~/.gitignore.global
 [push]
 	default = current
 [pull]

@@ -7,16 +7,11 @@ set backspace=indent,eol,start
 set viminfo='20,\"1024
 set history=200
 set ruler
-" set cursorline
-set showmode showcmd
-" StatusLine always visible, display full path
-" http://learnvimscriptthehardway.stevelosh.com/chapters/17.html
-set laststatus=2 statusline=%F
 
 set hlsearch incsearch ignorecase smartcase
 set showmatch
 
-set autochdir
+" set autochdir
 
 " http://stackoverflow.com/questions/9511253/how-to-effectively-use-vim-wildmenu
 set wildmenu wildmode=list:longest,full
@@ -34,7 +29,7 @@ set winminwidth=0 winminheight=0
 set ttyfast lazyredraw
 
 set scrolloff=10
-set colorcolumn=81
+"set colorcolumn=81
 
 set fileencodings=utf8 enc=utf8
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
@@ -104,6 +99,16 @@ Plug 'sjl/gundo.vim'
 " https://github.com/airblade/vim-gitgutter
 Plug 'airblade/vim-gitgutter'
 
+" https://github.com/nvim-telescope/telescope.nvim
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
+Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+
 " Want:
 " https://github.com/svermeulen/vim-easyclip
 
@@ -111,15 +116,15 @@ Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 
-syntax enable
 
 " Theming
 " if has('nvim')
 "     set termguicolors 
 " endif
+syntax enable
+colorscheme PaperColor
 set t_Co=256   " This is may or may not needed.
 set background=light
-colorscheme PaperColor
 let g:lightline = {
       \ 'colorscheme': 'PaperColor_light',
       \ 'active': {
@@ -127,5 +132,30 @@ let g:lightline = {
       \             [ 'readonly', 'absolutepath', 'modified' ] ]
       \ }
       \ }
+" set cursorline
+set noshowmode showcmd
+" StatusLine always visible, display full path
+" http://learnvimscriptthehardway.stevelosh.com/chapters/17.html
+set laststatus=2 statusline=%F
 
 nnoremap <F5> :GundoToggle<CR>
+
+
+" Easily modify vimrc 
+nmap <leader>v :e $MYVIMRC<CR>
+" http://stackoverflow.com/questions/2400264/is-it-possible-to-apply-vim-configurations-without-restarting/2400289#2400289
+if has("autocmd")
+  augroup myvimrchooks
+    au!
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc,init.vim nested source $MYVIMRC | lua print('Reloaded vimrc')
+    call lightline#enable()
+  augroup END
+endif 
+
+function! CssToJs() range
+    execute ":silent '<,'>s/;/',/"
+    execute ":silent '<,'>s/: /: '/"
+    " Convert dashed case to camel as long as it is before the first colon:
+    execute ":silent '<,'>s#\\v^([^:]*)-(\\l)#\\1\\u\\2#g"
+endfunction
+command! -range CssToJs <line1>,<line2>call CssToJs()
