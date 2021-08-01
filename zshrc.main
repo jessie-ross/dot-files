@@ -2,6 +2,8 @@
 
 setopt AUTO_LIST
 setopt AUTO_MENU
+setopt NONOMATCH
+setopt COMPLETEINWORD EXTENDEDGLOB
 
 autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
@@ -39,6 +41,14 @@ bindkey "^X^E" edit-command-line
 ## Navigation ##
 
 setopt AUTO_PUSHD
+setopt CDABLE_VARS
+
+
+
+## Extras ##
+
+autoload -Uz zmv # Batch move and rename 
+alias zmv='noglob zmv'
 
 
 

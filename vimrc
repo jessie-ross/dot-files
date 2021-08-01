@@ -81,24 +81,18 @@ call plug#begin('~/.vim/plugged')
 " https://github.com/itchyny/lightline.vim
 Plug 'itchyny/lightline.vim'
 
-" https://github.com/tpope/vim-commentary
+" tpope fan club 
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
-
-" https://github.com/tpope/vim-fugitive
+Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
-
-" https://github.com/tpope/vim-repeat
 Plug 'tpope/vim-repeat'
-
-" https://github.com/tpope/vim-surround
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
-
-" https://github.com/tpope/vim-unimpaired
 Plug 'tpope/vim-unimpaired'
-
-" https://github.com/tpope/vim-vinegar
 Plug 'tpope/vim-vinegar'
+
+Plug 'junegunn/gv.vim'
 
 " https://github.com/NLKNguyen/papercolor-theme
 Plug 'NLKNguyen/papercolor-theme'
@@ -106,21 +100,21 @@ Plug 'NLKNguyen/papercolor-theme'
 " https://github.com/airblade/vim-gitgutter
 Plug 'airblade/vim-gitgutter'
 
-" https://github.com/nvim-telescope/telescope.nvim
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzy-native.nvim'
-Plug 'ryanoasis/vim-devicons'
+Plug 'tommcdo/vim-exchange'
 
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-Plug 'nvim-treesitter/playground'
+if has('nvim')
+    Plug 'nvim-lua/popup.nvim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-telescope/telescope-fzy-native.nvim'
+    Plug 'ryanoasis/vim-devicons'
 
-Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
-" Want:
-" https://github.com/svermeulen/vim-easyclip
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+    Plug 'nvim-treesitter/playground'
+endif
 
 " Initialize plugin system
 call plug#end()
@@ -156,17 +150,15 @@ set laststatus=2 statusline=%F
 
 let mapleader = ' '
 
-nnoremap <leader>qq :q<CR>
 
 " Editing
 vnoremap <leader>p "_dP
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
 
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y gg"+yG
-
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
 
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -175,6 +167,13 @@ vnoremap K :m '<-2<CR>gv=gv
 nnoremap <leader>gg :Git<CR>
 nnoremap <leader>gv :GV<CR>
 
+" Buffers
+nnoremap <leader>wq :q<CR>
+nnoremap <leader>ww :w<CR>
+" Classic buffer switching 
+nnoremap <leader>wl :ls<CR>:b<space>
+
+
 
 " Easily modify vimrc 
 nmap <leader>v :e $MYVIMRC<CR>
@@ -182,7 +181,7 @@ nmap <leader>v :e $MYVIMRC<CR>
 if has("autocmd")
   augroup myvimrchooks
     au!
-    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc,init.vim nested source $MYVIMRC | lua print('Reloaded vimrc')
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc,init.vim nested source $MYVIMRC | echo 'Reloaded vimrc'
     call lightline#enable()
   augroup END
 endif 
@@ -195,7 +194,6 @@ function! CssToJs() range
 endfunction
 command! -range CssToJs <line1>,<line2>call CssToJs()
 
-cmap w!! w !sudo tee % >/dev/null
 
 
 " ## Notes ##
