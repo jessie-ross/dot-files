@@ -1,4 +1,5 @@
-" Basics:
+" ## Basics: ##
+
 set nocompatible
 
 " allow backspacing over everything in insert mode
@@ -15,7 +16,7 @@ set showmatch
 
 " http://stackoverflow.com/questions/9511253/how-to-effectively-use-vim-wildmenu
 set wildmenu wildmode=list:longest,full
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.DS_Store,.*.un~
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.DS_Store,.*.un~,**/node_module/
 
 set visualbell
 if has('mouse')
@@ -37,6 +38,8 @@ set scrolloff=10
 set fileencodings=utf8 enc=utf8
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 set autoindent
+
+set listchars=eol:⏎,tab:▸\ ,trail:·,nbsp:⎵
 
 set autoread
 " http://stackoverflow.com/questions/2490227/how-does-vims-autoread-work#20418591
@@ -61,8 +64,9 @@ set backupskip=/tmp/*,/private/tmp/*
 set directory=~/.vim-tmp/swap/
 
 
-" # Vim-plug
-"
+
+" ## Vim-plug ##
+
 " Installation:
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 " 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -82,6 +86,7 @@ Plug 'tpope/vim-commentary'
 
 " https://github.com/tpope/vim-fugitive
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
 
 " https://github.com/tpope/vim-repeat
 Plug 'tpope/vim-repeat'
@@ -98,9 +103,6 @@ Plug 'tpope/vim-vinegar'
 " https://github.com/NLKNguyen/papercolor-theme
 Plug 'NLKNguyen/papercolor-theme'
 
-" https://github.com/sjl/gundo.vim
-Plug 'sjl/gundo.vim'
-
 " https://github.com/airblade/vim-gitgutter
 Plug 'airblade/vim-gitgutter'
 
@@ -108,9 +110,12 @@ Plug 'airblade/vim-gitgutter'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
+Plug 'ryanoasis/vim-devicons'
 
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+Plug 'nvim-treesitter/playground'
 
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
@@ -122,7 +127,8 @@ call plug#end()
 
 
 
-" Theming
+" ## Theming ##
+
 " if has('nvim')
 "     set termguicolors 
 " endif
@@ -143,7 +149,31 @@ set noshowmode showcmd
 " http://learnvimscriptthehardway.stevelosh.com/chapters/17.html
 set laststatus=2 statusline=%F
 
-nnoremap <F5> :GundoToggle<CR>
+
+
+" ## Custom and mapping ##
+
+
+let mapleader = ' '
+
+nnoremap <leader>qq :q<CR>
+
+" Editing
+vnoremap <leader>p "_dP
+
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>Y gg"+yG
+
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Git
+nnoremap <leader>gg :Git<CR>
+nnoremap <leader>gv :GV<CR>
 
 
 " Easily modify vimrc 
@@ -164,3 +194,13 @@ function! CssToJs() range
     execute ":silent '<,'>s#\\v^([^:]*)-(\\l)#\\1\\u\\2#g"
 endfunction
 command! -range CssToJs <line1>,<line2>call CssToJs()
+
+cmap w!! w !sudo tee % >/dev/null
+
+
+" ## Notes ##
+
+" Change to current directory 
+" :cd %:h
+" In netrw: c
+

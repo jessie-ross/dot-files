@@ -1,18 +1,48 @@
+## Completion ##
+
+setopt AUTO_LIST
+setopt AUTO_MENU
+
 autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ''
+
+
+
+## History ##
+HISTFILE=~/.zsh_history 
+HISTSIZE=1500 # history items kept internally
+SAVEHIST=1500 # history items saved
+
+setopt SHARE_HISTORY # share history between sessions
+setopt HIST_FCNTL_LOCK # use OS file locking
+setopt HIST_IGNORE_SPACE # Don't record commands entered starting with a space
+setopt HIST_IGNORE_DUPS # don't store immediate dups
+setopt HIST_NO_STORE # don't store fc/history commands
+setopt HIST_REDUCE_BLANKS # canonicalize whitespace
+setopt HIST_VERIFY # pause to edit ! item
+
+
+## Prompt ##
+
+autoload -Uz colors && colors
 autoload -Uz promptinit && promptinit && prompt bart
-
-# Don't record commands entered starting with a space
-setopt HIST_IGNORE_SPACE
-# Immediately append history
-setopt INC_APPEND_HISTORY
-
 PROMPT="%189>..>%{%F{red}%}%n@%m%b%f%k%9(v. . %{%F{blue}%}%(?.[.%20(?.[%U.%S[))%7v%(?.].%20(?.%u].]%s))%b%f%k )%{%F{default}%}%8~%b%f%k%<<%8v%174(l. . %{%F{default}%}%D%b%f%k)%182(l.. %{%F{red}%}%@%b%f%k)%9(v.
 %{%F{blue}%}%(?.[.%20(?.[%U.%S[))%7v%(?.].%20(?.%u].]%s))%b%f%k.)
 %# "
 
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
 
 
-# # Custom functions and aliases
+## Navigation ##
+
+setopt AUTO_PUSHD
+
+
+
+## Custom functions and aliases ##
 
 function napropos () {
 	npm run | grep $1 -A 1
@@ -20,15 +50,25 @@ function napropos () {
 alias nr='npm run'
 alias g='git'
 alias v='nvim'
+alias l='ls'
+alias la='ls -A'
+alias ll='ls -lAh'
 alias readyit='time ( npm run format && npm run lint:ts:fix && npm run test:all ) ; say -v Karen task finished'
 alias testit='time npm run test:all; say -v Karen task finished'
 alias format='time ( npm run format && npm run lint:ts:fix ) ; say -v Karen task finished'
+
+
+
+## Custom env ##
+
 export SBT_OPTS="-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=8080 -Duser.timezone=UTC"
 #export HUSKY=0
-
+#
 # Calypso Required Settings
 export NODE_OPTIONS=--max-old-space-size=24576
 export CHROMEDRIVER_SKIP_DOWNLOAD=false
 # This one is annoying 
 export PUPPETEER_SKIP_DOWNLOAD=false
 
+export CLICOLOR=1
+export EDITOR=nvim

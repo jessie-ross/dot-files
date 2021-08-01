@@ -4,9 +4,38 @@ source ~/.vimrc
 
 " Telescope
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>ft :Telescope<CR>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+nnoremap <leader>fvc <cmd>lua require('telescope.builtin').commands()<cr>
+
+nnoremap <leader>gb <cmd>lua require('telescope.builtin').git_branches()<cr>
+
+lua << EOF
+local actions = require('telescope.actions')
+require('telescope').setup {
+    defaults = {
+        file_sorter = require('telescope.sorters').get_fzy_sorter,
+        color_devicons = true,
+        mappings = {
+            i = {
+                ["<C-Q>"] = actions.add_to_qflist + actions.open_qflist,
+                ["<M-Q>"] = actions.add_selected_to_qflist + actions.open_qflist,
+            },
+        }
+    },
+    extensions = {
+        fzy_native = {
+            override_generic_sorter = false,
+            override_file_sorter = true,
+        }
+    }
+}
+
+require('telescope').load_extension('fzy_native')
+EOF
 
 " LSP
 lua << EOF
@@ -69,9 +98,12 @@ local ts_utils_settings = {
     update_imports_on_move = true,
 }
 
+local flags = { debounce_text_changes = 150, }
+
+-- sudo npm install -g typescript typescript-language-server diagnostic-languageserver eslint_d
 lspconfig.tsserver.setup({
     -- cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/usr/local/bin/tsserver-wrapper" },
-    flags = { debounce_text_changes = 150, },
+    flags,
     on_attach = function(client, bufnr)
         client.resolved_capabilities.document_formatting = false
         on_attach(client, bufnr)
@@ -87,6 +119,44 @@ lspconfig.tsserver.setup({
         buf_set_keymap('n', 'qq', ':TSLspFixCurrent<CR>', opts)
     end,
 })
+
+-- npm install -g pyright
+lspconfig.pyright.setup({
+    -- cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/usr/local/bin/tsserver-wrapper" },
+    flags,
+    on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+    end,
+})
+
+-- Don't have a binary for this yet
+lspconfig.sumneko_lua.setup {
+    -- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+    on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+    end,
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+                -- Setup your lua path
+                path = vim.split(package.path, ';'),
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = {'vim'},
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = {
+                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+                },
+            },
+        },
+    },
+}
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
