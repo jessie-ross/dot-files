@@ -2,8 +2,11 @@ set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
 
-" Telescope
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+
+
+" ## Telescope ##
+
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>
 nnoremap <leader>ft :Telescope<CR>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
@@ -11,7 +14,15 @@ nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 nnoremap <leader>fvc <cmd>lua require('telescope.builtin').commands()<cr>
 
+" - `<cr>`: checks out the currently selected branch
+" - `<C-t>`: tracks currently selected branch
+" - `<C-r>`: rebases currently selected branch
+" - `<C-a>`: creates a new branch, with confirmation prompt before creation
+" - `<C-d>`: deletes the currently selected branch, with confirmation prompt before deletion
 nnoremap <leader>gb <cmd>lua require('telescope.builtin').git_branches()<cr>
+" - `<Tab>`: stages or unstages the currently selected file
+" - `<cr>`: opens the currently selected file
+nnoremap <leader>gs <cmd>lua require('telescope.builtin').git_status()<cr>
 
 lua << EOF
 local actions = require('telescope.actions')
@@ -26,6 +37,22 @@ require('telescope').setup {
             },
         }
     },
+pickers = {
+    buffers = {
+        show_all_buffers = true,
+        sort_lastused = true,
+        theme = "dropdown",
+        previewer = false,
+        mappings = {
+            i = {
+                ["<c-d>"] = require("telescope.actions").delete_buffer,
+                },
+            n = {
+                ["<c-d>"] = require("telescope.actions").delete_buffer,
+                }
+            }
+        }
+    },
     extensions = {
         fzy_native = {
             override_generic_sorter = false,
@@ -37,7 +64,10 @@ require('telescope').setup {
 require('telescope').load_extension('fzy_native')
 EOF
 
-" LSP
+
+
+" ## LSP ##
+
 lua << EOF
 local lspconfig = require('lspconfig')
 local ts_utils = require("nvim-lsp-ts-utils")
@@ -60,18 +90,18 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<leader>lwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<leader>lwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<leader>lwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>lrn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>lca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  buf_set_keymap('n', '<leader>lq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -110,19 +140,27 @@ lspconfig.tsserver.setup({
 
         ts_utils.setup(ts_utils_settings)
         ts_utils.setup_client(client)
-        
+
         -- Mappings.
         local opts = { noremap=true, silent=true }
-        buf_set_keymap('n', 'gs', ':TSLspOrganize<CR>', opts)
-        buf_set_keymap('n', 'gI', ':TSLspRenameFile<CR>', opts)
-        buf_set_keymap('n', 'go', ':TSLspImportAll<CR>', opts)
-        buf_set_keymap('n', 'qq', ':TSLspFixCurrent<CR>', opts)
+        buf_set_keymap('n', '<leader>lgs', ':TSLspOrganize<CR>', opts)
+        buf_set_keymap('n', '<leader>lgI', ':TSLspRenameFile<CR>', opts)
+        buf_set_keymap('n', '<leader>lgo', ':TSLspImportAll<CR>', opts)
+        buf_set_keymap('n', '<leader>qq', ':TSLspFixCurrent<CR>', opts)
     end,
 })
 
 -- npm install -g pyright
 lspconfig.pyright.setup({
-    -- cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/usr/local/bin/tsserver-wrapper" },
+settings = {
+    python = {
+        analysis = {
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            diagnosticMode = 'openFilesOnly',
+        }
+    }
+    },
     flags,
     on_attach = function(client, bufnr)
         on_attach(client, bufnr)
@@ -157,7 +195,13 @@ lspconfig.sumneko_lua.setup {
         },
     },
 }
+EOF
 
+
+
+" ## Treesitter ##
+
+lua << EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   -- ignore_install = { "javascript" }, -- List of parsers to ignore installing

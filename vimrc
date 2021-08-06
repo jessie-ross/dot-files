@@ -50,18 +50,26 @@ set hidden
 if !isdirectory($HOME . "/.vim-tmp")
     call mkdir($HOME . "/.vim-tmp/backup", "p", 0700)
     call mkdir($HOME . "/.vim-tmp/swap", "p", 0700)
-    call mkdir($HOME . "/.vim-tmp/undo", "p", 0700)
+    call mkdir($HOME . "/.vim-tmp/undo-nvim", "p", 0700)
+    call mkdir($HOME . "/.vim-tmp/undo-vim", "p", 0700)
 endif
 set backup
-set backupdir=~/.vim-tmp/backup/
+set backupdir=~/.vim-tmp/backup//
 if has("persistent_undo")
-	set undofile
-	set undodir=~/.vim-tmp/undo/
+    set undofile
+    if has("nvim")
+        set undodir=~/.vim-tmp/undo-nvim//
+    else
+        set undodir=~/.vim-tmp/undo-vim//
+    endif
 endif
 " If we backup temporary files often automated editing tools like the crontab
 " editor get confused
 set backupskip=/tmp/*,/private/tmp/*
-set directory=~/.vim-tmp/swap/
+set directory=~/.vim-tmp/swap//
+
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
 
 
@@ -81,17 +89,19 @@ call plug#begin('~/.vim/plugged')
 " https://github.com/itchyny/lightline.vim
 Plug 'itchyny/lightline.vim'
 
-" tpope fan club 
+" tpope fan club
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 
+Plug 'junegunn/goyo.vim'
 Plug 'junegunn/gv.vim'
 
 " https://github.com/NLKNguyen/papercolor-theme
@@ -101,6 +111,8 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'airblade/vim-gitgutter'
 
 Plug 'tommcdo/vim-exchange'
+
+" Plug 'dense-analysis/ale'
 
 if has('nvim')
     Plug 'nvim-lua/popup.nvim'
@@ -120,11 +132,73 @@ endif
 call plug#end()
 
 
+" ## Plugin config ##
+
+" " Ale - Automatic Linting/Fixing.
+" let g:ale_fix_on_save = 0
+" let g:ale_lint_on_save = 1
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_insert_leave = 0
+" let g:ale_javascript_prettier_use_local_config = 1
+" let g:airline#extensions#ale#enabled = 1
+
+" command! ALEToggleFixer execute "let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0) ? 0 : 1 | echo g:ale_fix_on_save"
+" nnoremap yof :ALEToggleFixer<cr>
+
+" let g:ale_linter_aliases = {'pandoc': ['markdown']}
+" let g:ale_linters = {
+"   \   'elixir': ['credo', 'mix'],
+"   \   'perl6': ['perl6'],
+"   \}
+" let g:ale_php_phpcbf_use_global = 1
+" let g:ale_php_phpcs_use_global = 1
+" let g:ale_fixers = {
+"   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+"   \   'php': [
+"   \       'phpcbf'
+"   \   ],
+"   \   'typescript': [
+"   \       'prettier', 'eslint'
+"   \   ],
+"   \   'typescriptreact': [
+"   \       'prettier', 'eslint'
+"   \   ],
+"   \   'javascript': [
+"   \       'prettier', 'eslint'
+"   \   ],
+"   \   'javascriptreact': [
+"   \       'prettier', 'eslint'
+"   \   ],
+"   \   'go': [
+"   \       'gofmt', 'goimports'
+"   \   ],
+"   \   'markdown': [
+"   \       'prettier', 'eslint'
+"   \   ],
+"   \   'pandoc': [
+"   \       'prettier',
+"   \   ],
+"   \   'elixir': [
+"   \       'mix_format',
+"   \   ],
+"   \   'haskell': [
+"   \       'brittany',
+"   \   ],
+"   \   'rust': [
+"   \       'rustfmt',
+"   \   ],
+"   \   'python': [
+"   \       'black',
+"   \   ],
+"   \   'ruby': ['prettier'],
+"   \}
+
+
 
 " ## Theming ##
 
 " if has('nvim')
-"     set termguicolors 
+"     set termguicolors
 " endif
 syntax enable
 colorscheme PaperColor
@@ -170,12 +244,12 @@ nnoremap <leader>gv :GV<CR>
 " Buffers
 nnoremap <leader>wq :q<CR>
 nnoremap <leader>ww :w<CR>
-" Classic buffer switching 
+" Classic buffer switching
 nnoremap <leader>wl :ls<CR>:b<space>
 
 
 
-" Easily modify vimrc 
+" Easily modify vimrc
 nmap <leader>v :e $MYVIMRC<CR>
 " http://stackoverflow.com/questions/2400264/is-it-possible-to-apply-vim-configurations-without-restarting/2400289#2400289
 if has("autocmd")
@@ -184,7 +258,7 @@ if has("autocmd")
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc,init.vim nested source $MYVIMRC | echo 'Reloaded vimrc'
     call lightline#enable()
   augroup END
-endif 
+endif
 
 function! CssToJs() range
     execute ":silent '<,'>s/;/',/"
@@ -198,7 +272,6 @@ command! -range CssToJs <line1>,<line2>call CssToJs()
 
 " ## Notes ##
 
-" Change to current directory 
+" Change to current directory
 " :cd %:h
 " In netrw: c
-

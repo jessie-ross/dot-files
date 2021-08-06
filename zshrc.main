@@ -1,3 +1,5 @@
+source ~/.env
+
 ## Completion ##
 
 setopt AUTO_LIST
@@ -23,6 +25,8 @@ setopt HIST_IGNORE_DUPS # don't store immediate dups
 setopt HIST_NO_STORE # don't store fc/history commands
 setopt HIST_REDUCE_BLANKS # canonicalize whitespace
 setopt HIST_VERIFY # pause to edit ! item
+
+stty -ixon # Disable flow-control so C-s works
 
 
 ## Prompt ##
@@ -54,6 +58,27 @@ alias zmv='noglob zmv'
 
 ## Custom functions and aliases ##
 
+function gwta () {
+	# Create a git worktree under /repo-name.worktrees/ and pushd to it.
+	# Expects a bare repo to exist at /repo-name.worktrees/bare-repo.git
+	NEW_BRANCH=$1
+	EXISTING_BRANCH=${2:-master}
+	WORKTREE_ROOT=$(pwd | sed 's/\(^.*\.worktrees\).*/\1/')
+	BARE_DIR="${WORKTREE_ROOT}/bare-repo.git"
+	if [ -d "${BARE_DIR}" ] 
+	then
+		pushd "${BARE_DIR}" > /dev/null
+		git worktree add -b "$NEW_BRANCH" "${WORKTREE_ROOT}/${NEW_BRANCH}" "$EXISTING_BRANCH" 
+		popd > /dev/null
+		pushd "${WORKTREE_ROOT}/${NEW_BRANCH}" 
+		if [ -d "${WORKTREE_ROOT}/${EXISTING_BRANCH}/node_modules" ]
+		then
+			ln -s "${WORKTREE_ROOT}/${EXISTING_BRANCH}/node_modules" .
+		fi
+	else
+		echo Cannot find root bare directory
+	fi
+}
 function napropos () {
 	npm run | grep $1 -A 1
 }
@@ -67,18 +92,3 @@ alias readyit='time ( npm run format && npm run lint:ts:fix && npm run test:all 
 alias testit='time npm run test:all; say -v Karen task finished'
 alias format='time ( npm run format && npm run lint:ts:fix ) ; say -v Karen task finished'
 
-
-
-## Custom env ##
-
-export SBT_OPTS="-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=8080 -Duser.timezone=UTC"
-#export HUSKY=0
-#
-# Calypso Required Settings
-export NODE_OPTIONS=--max-old-space-size=24576
-export CHROMEDRIVER_SKIP_DOWNLOAD=false
-# This one is annoying 
-export PUPPETEER_SKIP_DOWNLOAD=false
-
-export CLICOLOR=1
-export EDITOR=nvim

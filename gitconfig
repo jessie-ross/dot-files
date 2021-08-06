@@ -1,24 +1,25 @@
 # This is Git's per-user configuration file.
 [user]
-	name = Jessie Ross
-	email = j@scjr.me
+    name = Jessie Ross
+    email = j@scjr.me
 [includeIf "gitdir:~/code/"]
-	path = ~/code/.gitconfig
+    path = ~/code/.gitconfig
 [core]
     excludesfile = ~/.gitignore.global
 [push]
-	default = current
+    default = current
 [pull]
-	ff = only
+    ff = only
 [alias]
-	co = checkout
-	cp = cherry-pick
-	sw = switch
-	st = status
-	fa = fetch --all
-	c = commit
+    co = checkout
+    cp = cherry-pick
+    sw = switch
+    wt = worktree
+    st = status
+    fa = fetch --all
+    c = commit
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
