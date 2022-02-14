@@ -52,14 +52,7 @@ brew install \
 	ripgrep \
 	neovim \
 	tree-sitter \
-	volta \
-	conda
-
-if [ ! -f ~/.inputrc ]
-then
-	echo "set bell-style off" > ~/.inputrc
-fi
-
+	volta
 
 
 ### Apple Settings ###
