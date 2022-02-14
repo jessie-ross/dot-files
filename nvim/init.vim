@@ -29,6 +29,7 @@ local actions = require('telescope.actions')
 require('telescope').setup {
     defaults = {
         file_sorter = require('telescope.sorters').get_fzy_sorter,
+        file_ignore_patterns = {"node_modules", ".git"},
         color_devicons = true,
         mappings = {
             i = {

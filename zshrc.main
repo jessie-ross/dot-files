@@ -62,7 +62,7 @@ function gwta () {
 	# Create a git worktree under /repo-name.worktrees/ and pushd to it.
 	# Expects a bare repo to exist at /repo-name.worktrees/bare-repo.git
 	NEW_BRANCH=$1
-	EXISTING_BRANCH=${2:-master}
+	EXISTING_BRANCH=${2:-origin/master}
 	WORKTREE_ROOT=$(pwd | sed 's/\(^.*\.worktrees\).*/\1/')
 	BARE_DIR="${WORKTREE_ROOT}/bare-repo.git"
 	if [ -d "${BARE_DIR}" ] 
@@ -92,3 +92,12 @@ alias readyit='time ( npm run format && npm run lint:ts:fix && npm run test:all 
 alias testit='time npm run test:all; say -v Karen task finished'
 alias format='time ( npm run format && npm run lint:ts:fix ) ; say -v Karen task finished'
 
+export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
+
+
+# Change directory to what Finder is looking at:
+# Via https://twitter.com/QuinnyPig/status/1473112091808591874
+cdf() {
+    target=`osascript -e 'tell application "Finder" to get POSIX path of (target of front Finder window as text)'`
+    cd "$target"
+}

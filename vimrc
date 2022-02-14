@@ -16,7 +16,7 @@ set showmatch
 
 " http://stackoverflow.com/questions/9511253/how-to-effectively-use-vim-wildmenu
 set wildmenu wildmode=list:longest,full
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.DS_Store,.*.un~,**/node_module/
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.DS_Store,.*.un~,**/node_module/,**/.git/
 
 set visualbell
 if has('mouse')
@@ -90,16 +90,17 @@ call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 
 " tpope fan club
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-abolish' " better find and replace
+Plug 'tpope/vim-commentary' " comments
+Plug 'tpope/vim-eunuch' " unix tools
+Plug 'tpope/vim-fireplace' " clojure
+Plug 'tpope/vim-fugitive' " git
+Plug 'tpope/vim-repeat' " make repeat work with other things
+Plug 'tpope/vim-rsi' " readline shortcuts
+Plug 'tpope/vim-sleuth' " guess file tab/spaces
+Plug 'tpope/vim-surround' " dealing with quotes and brackets
+Plug 'tpope/vim-unimpaired' " yox and [x ]x
+Plug 'tpope/vim-vinegar' " netrw
 
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/gv.vim'
@@ -112,7 +113,11 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'tommcdo/vim-exchange'
 
+Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
+
 " Plug 'dense-analysis/ale'
+
+" Plug 'ludovicchabant/vim-gutentags'
 
 if has('nvim')
     Plug 'nvim-lua/popup.nvim'
@@ -126,6 +131,8 @@ if has('nvim')
 
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     Plug 'nvim-treesitter/playground'
+
+    Plug 'github/copilot.vim'
 endif
 
 " Initialize plugin system
@@ -134,64 +141,71 @@ call plug#end()
 
 " ## Plugin config ##
 
-" " Ale - Automatic Linting/Fixing.
-" let g:ale_fix_on_save = 0
-" let g:ale_lint_on_save = 1
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_lint_on_insert_leave = 0
-" let g:ale_javascript_prettier_use_local_config = 1
-" let g:airline#extensions#ale#enabled = 1
 
-" command! ALEToggleFixer execute "let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0) ? 0 : 1 | echo g:ale_fix_on_save"
-" nnoremap yof :ALEToggleFixer<cr>
+let g:goyo_width=130
 
-" let g:ale_linter_aliases = {'pandoc': ['markdown']}
-" let g:ale_linters = {
-"   \   'elixir': ['credo', 'mix'],
-"   \   'perl6': ['perl6'],
-"   \}
-" let g:ale_php_phpcbf_use_global = 1
-" let g:ale_php_phpcs_use_global = 1
-" let g:ale_fixers = {
-"   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-"   \   'php': [
-"   \       'phpcbf'
-"   \   ],
-"   \   'typescript': [
-"   \       'prettier', 'eslint'
-"   \   ],
-"   \   'typescriptreact': [
-"   \       'prettier', 'eslint'
-"   \   ],
-"   \   'javascript': [
-"   \       'prettier', 'eslint'
-"   \   ],
-"   \   'javascriptreact': [
-"   \       'prettier', 'eslint'
-"   \   ],
-"   \   'go': [
-"   \       'gofmt', 'goimports'
-"   \   ],
-"   \   'markdown': [
-"   \       'prettier', 'eslint'
-"   \   ],
-"   \   'pandoc': [
-"   \       'prettier',
-"   \   ],
-"   \   'elixir': [
-"   \       'mix_format',
-"   \   ],
-"   \   'haskell': [
-"   \       'brittany',
-"   \   ],
-"   \   'rust': [
-"   \       'rustfmt',
-"   \   ],
-"   \   'python': [
-"   \       'black',
-"   \   ],
-"   \   'ruby': ['prettier'],
-"   \}
+" Ale - Automatic Linting/Fixing.
+let g:ale_fix_on_save = 0
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_javascript_prettier_use_local_config = 1
+let g:airline#extensions#ale#enabled = 1
+
+command! ALEToggleFixer execute "let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0) ? 0 : 1 | echo g:ale_fix_on_save"
+nnoremap yof :ALEToggleFixer<cr>
+
+let g:ale_linter_aliases = {'pandoc': ['markdown']}
+let g:ale_linters = {
+  \   'elixir': ['credo', 'mix'],
+  \   'perl6': ['perl6'],
+  \}
+let g:ale_php_phpcbf_use_global = 1
+let g:ale_php_phpcs_use_global = 1
+let g:ale_fixers = {
+  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+  \   'php': [
+  \       'phpcbf'
+  \   ],
+  \   'typescript': [
+  \       'prettier', 'eslint'
+  \   ],
+  \   'typescriptreact': [
+  \       'prettier', 'eslint'
+  \   ],
+  \   'javascript': [
+  \       'prettier', 'eslint'
+  \   ],
+  \   'javascriptreact': [
+  \       'prettier', 'eslint'
+  \   ],
+  \   'go': [
+  \       'gofmt', 'goimports'
+  \   ],
+  \   'markdown': [
+  \       'prettier', 'eslint'
+  \   ],
+  \   'pandoc': [
+  \       'prettier',
+  \   ],
+  \   'elixir': [
+  \       'mix_format',
+  \   ],
+  \   'haskell': [
+  \       'brittany',
+  \   ],
+  \   'rust': [
+  \       'rustfmt',
+  \   ],
+  \   'python': [
+  \       'black',
+  \   ],
+  \   'ruby': ['prettier'],
+  \}
+
+
+" let g:gutentags_project_root = ['.gutctags']
+" let g:gutentags_define_advanced_commands = 1
 
 
 
@@ -250,7 +264,8 @@ nnoremap <leader>wl :ls<CR>:b<space>
 
 
 " Easily modify vimrc
-nmap <leader>v :e $MYVIMRC<CR>
+nmap <leader>vnv :e $MYVIMRC<CR>
+nmap <leader>vrc :e ~/.vimrc<CR>
 " http://stackoverflow.com/questions/2400264/is-it-possible-to-apply-vim-configurations-without-restarting/2400289#2400289
 if has("autocmd")
   augroup myvimrchooks
@@ -268,8 +283,22 @@ function! CssToJs() range
 endfunction
 command! -range CssToJs <line1>,<line2>call CssToJs()
 
+function! SqlToDataFrameT() range
+    execute ":silent '<,'>s#\\v^( *)#\\1\"#"
+    execute ":silent '<,'>s#\\v,#\",#"
+endfunction
+command! -range SqlToDataFrameT <line1>,<line2>call SqlToDataFrameT()
+
+function! WPComTrunkSaveSendAndTest()
+  execute ":w"
+  execute ":!( ~/scripts/wppush && ssh sandbox 'tmux send-keys run-test ENTER' ) &"
+  " execute ":!ssh sandbox 'tmux send-keys run-test ENTER' &"
+endfunction
+command! WPCom call WPComTrunkSaveSendAndTest()
+nmap <leader>wp :call WPComTrunkSaveSendAndTest()<CR>
 
 
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
 " ## Notes ##
 
 " Change to current directory
