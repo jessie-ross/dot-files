@@ -54,6 +54,21 @@ brew install \
 	tree-sitter \
 	volta
 
+volta install \
+  node \
+  npm \
+  yarn
+
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+npm install -g \
+  typescript \
+  typescript-language-server \
+  diagnostic-languageserver \
+  eslint_d \
+  pyright
+
 
 ### Apple Settings ###
 
@@ -66,6 +81,7 @@ defaults write com.apple.dock mru-spaces -bool false
 # Remap CapsLock to Ctrl
 if [ ! -f ~/Library/LaunchAgents/me.scjr.CapslockToCtrl.plist ]
 then
+	mkdir -p ~/Library/LaunchAgents
 	cat <<EOF > ~/Library/LaunchAgents/me.scjr.CapslockToCtrl.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
