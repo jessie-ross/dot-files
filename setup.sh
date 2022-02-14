@@ -212,5 +212,17 @@ defaults write com.apple.commerce AutoUpdate -bool true
 defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
 
 
+### Add dotfiles in ###
+
+if [ ! -d ~/code-personal ] ; then
+  (
+    mkdir ~/code-personal
+    cd ~/code-personal
+    git clone https://github.com/jessie-ross/dot-files.git
+    cd dot-files
+    ./links.sh
+  )
+fi
+
 
 echo Some of these changes require a reboot to take affect.
