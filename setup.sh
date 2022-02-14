@@ -18,7 +18,9 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 if ! which brew > /dev/null
 then
 	echo "Installing Homebrew"
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/j/.zprofile
+	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 brew install --cask \
