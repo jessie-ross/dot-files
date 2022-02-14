@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# To run:
+# $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jessie-ross/dot-files/main/setup.sh)"
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
