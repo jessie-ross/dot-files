@@ -199,6 +199,9 @@ lspconfig.sumneko_lua.setup {
 EOF
 
 
+" Disable diagnostics:
+" :lua vim.diagnostic.config({virtual_text = false})
+
 
 " ## Treesitter ##
 

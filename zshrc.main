@@ -101,3 +101,41 @@ cdf() {
     target=`osascript -e 'tell application "Finder" to get POSIX path of (target of front Finder window as text)'`
     cd "$target"
 }
+
+alias vsetup='( cd ~/code-personal/dot-files/ && v ./setup.sh && ./setup.sh )'
+alias vzshrc='v ~/code-personal/dot-files/zshrc.main && source ~/code-personal/dot-files/zshrc.main'
+alias vzshrcl='v ~/.zshrc && source ~/.zshrc'
+
+
+function op-open-and-fill() (
+    local VAULT_UUID="$1"
+    local ITEM_UUID="$2"
+    local URL="$3"
+    local SHA256_URL="$(echo -n "$URL" | sha256sum | awk '{print $1;}')"
+
+    open "onepassword7://open_and_fill/$VAULT_UUID/$ITEM_UUID/$SHA256_URL"
+    # 1P needs a bit of time to do it's thing:
+    sleep 3
+)
+
+
+function op-ssh-add() (
+	# Requires $OP_SESSION_my to be set
+	
+	AUTH_TIMEOUT="${1:-1h}"
+	SSH_KEY_PATH="$2"
+	OP_ITEM_UUID="$3"
+	
+	# This is all required to provide a password into SSH_ASKPASS
+	TEMP_OP_PW_SCRIPT_PATH=$(mktemp)
+	cat <<EOF > "$TEMP_OP_PW_SCRIPT_PATH"
+#!/bin/bash
+OP_SESSION_my="${OP_SESSION_my}" op get item "${OP_ITEM_UUID}" --fields password
+EOF
+
+	chmod u+x "$TEMP_OP_PW_SCRIPT_PATH"
+
+	DISPLAY=1 SSH_ASKPASS="${TEMP_OP_PW_SCRIPT_PATH}" ssh-add -t "${AUTH_TIMEOUT}" "${SSH_KEY_PATH}" < /dev/null
+
+	rm "$TEMP_OP_PW_SCRIPT_PATH"
+)

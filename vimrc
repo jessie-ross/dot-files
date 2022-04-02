@@ -305,6 +305,25 @@ command! WPCom call WPComTrunkSaveSendAndTest()
 nmap <leader>wp :call WPComTrunkSaveSendAndTest()<CR>
 
 
+" Use system dark/light mode on Mac
+function! SyncSystemColorScheme(...)
+    let s:new_bg = "light"
+    if $TERM_PROGRAM ==? "Apple_Terminal"
+        let s:mode = systemlist("defaults read -g AppleInterfaceStyle")[0]
+        if s:mode ==? "dark"
+            let s:new_bg = "dark"
+        else
+            let s:new_bg = "light"
+        endif
+    endif
+    if &background !=? s:new_bg
+        let &background = s:new_bg
+    endif
+endfunction
+call SyncSystemColorScheme()
+call timer_start(3000, "SyncSystemColorScheme", {"repeat": -1})
+
+
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
 " ## Notes ##
 

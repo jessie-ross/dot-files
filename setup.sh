@@ -25,10 +25,11 @@ then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-brew install --cask \
+brew install --cask --quiet \
 	1password \
 	1password-cli \
 	alfred \
+	dash \
 	docker \
 	firefox \
 	flux \
@@ -38,11 +39,13 @@ brew install --cask \
 	slack \
 	spotify \
 	textual \
-	whatsapp
+	whatsapp \
+	zoom
 
-brew install \
+brew install --quiet \
 	coreutils \
 	findutils \
+	gh \
 	gnu-tar \
 	gnu-sed \
 	gawk \
@@ -51,10 +54,12 @@ brew install \
 	git-gui \
 	ripgrep \
 	neovim \
+	poetry \
+	python@3.8 \
 	tree-sitter \
 	volta
 
-volta install \
+volta install --quiet \
   node \
   npm \
   yarn
@@ -62,7 +67,7 @@ volta install \
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-npm install -g \
+npm install --quiet -g \
   typescript \
   typescript-language-server \
   diagnostic-languageserver \
@@ -73,7 +78,10 @@ npm install -g \
 ### Apple Settings ###
 
 # Disable “Press and Hold Keys”: 
-defaults write -g ApplePressAndHoldEnabled -bool true
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# faster key repetition: https://twitter.com/rauchg/status/863451302348468225
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # System Preferences > Mission Control > Automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
@@ -109,15 +117,19 @@ defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
 # Save screenshots to the screenshots folder
-mkdir ~/Screenshots
+mkdir -p ~/Screenshots
 defaults write com.apple.screencapture location -string "${HOME}/Screenshots"
 
 # Show remaining battery time; hide percentage
 defaults write com.apple.menuextra.battery ShowPercent -string "NO"
 defaults write com.apple.menuextra.battery ShowTime -string "YES"
 
-echo Run this command to clean the dock and start from scratch
+echo
+echo '######################################################'
+echo To wipe the Dock clean:
 echo '$ defaults write com.apple.dock persistent-apps -array'
+echo '######################################################'
+echo
 
 
 #### Activity Monitor ####
@@ -151,7 +163,7 @@ defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 # Show the ~/Library folder
-chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library 2> /dev/null || true
 
 # Display full POSIX path as Finder window title
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
@@ -227,15 +239,18 @@ defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
 
 ### Add dotfiles in ###
 
-if [ ! -d ~/code-personal ] ; then
+mkdir -p ~/code-personal
+
+if [ ! -d ~/code-personal/dot-files ] ; then
   (
-    mkdir ~/code-personal
     cd ~/code-personal
     git clone https://github.com/jessie-ross/dot-files.git
-    cd dot-files
-    ./links.sh
   )
 fi
 
+(
+  cd ~/code-personal/dot-files
+  ./links.sh
+)
 
 echo Some of these changes require a reboot to take affect.
