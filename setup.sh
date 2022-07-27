@@ -53,6 +53,7 @@ brew install --quiet \
 	git \
 	git-gui \
 	ripgrep \
+	lua-language-server \
 	neovim \
 	poetry \
 	python@3.8 \

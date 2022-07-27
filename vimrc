@@ -237,6 +237,10 @@ set noshowmode showcmd
 " StatusLine always visible, display full path
 " http://learnvimscriptthehardway.stevelosh.com/chapters/17.html
 set laststatus=2 statusline=%F
+if has("nvim")
+    set laststatus=3
+endif
+
 
 
 
@@ -268,6 +272,9 @@ nnoremap <leader>ww :w<CR>
 " Classic buffer switching
 nnoremap <leader>wl :ls<CR>:b<space>
 
+" Best of vim vinegar
+nnoremap - :E<CR>
+let g:netrw_banner = 0
 
 
 " Easily modify vimrc
@@ -298,7 +305,7 @@ command! -range SqlToDataFrameT <line1>,<line2>call SqlToDataFrameT()
 
 function! WPComTrunkSaveSendAndTest()
   execute ":w"
-  execute ":!( ~/scripts/wppush && ssh sandbox 'tmux send-keys run-test ENTER' ) &"
+  execute ":!( ~/scripts/wppush && ssh wpcom-sandbox 'tmux send-keys run-test ENTER' ) &"
   " execute ":!ssh sandbox 'tmux send-keys run-test ENTER' &"
 endfunction
 command! WPCom call WPComTrunkSaveSendAndTest()
