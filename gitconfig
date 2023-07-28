@@ -10,6 +10,7 @@
     default = current
 [pull]
     ff = only
+    rebase = merges
 [alias]
     co = checkout
     cp = cherry-pick
@@ -24,4 +25,6 @@
     process = git-lfs filter-process
     required = true
 [init]
-	defaultBranch = trunk
+    defaultBranch = trunk
+[rerere]
+    enabled = true

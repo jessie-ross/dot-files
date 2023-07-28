@@ -29,52 +29,79 @@ brew install --cask --quiet \
 	1password \
 	1password-cli \
 	alfred \
+	anki \
 	dash \
 	docker \
 	firefox \
 	flux \
 	messenger \
 	miniconda \
+	rstudio \
 	signal \
 	slack \
 	spotify \
 	textual \
 	whatsapp \
+	unison \
+	vlc \
 	zoom
 
 brew install --quiet \
+	clojure/tools/clojure \
 	coreutils \
+	coursier/formulas/coursier \
 	findutils \
+	fzf \
 	gh \
 	gnu-tar \
 	gnu-sed \
 	gawk \
+	graphviz \
 	grep \
 	git \
 	git-gui \
+	httpie \
+	jq \
+	r \
 	ripgrep \
+	rsync \
+	leiningen \
 	lua-language-server \
 	neovim \
+	nvm \
 	poetry \
 	python@3.8 \
+	rustup \
+	swi-prolog \
 	tree-sitter \
+	universal-ctags \
 	volta
+
+# NPM
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
 
 volta install --quiet \
   node \
   npm \
   yarn
 
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
-npm install --quiet -g \
+volta run npm install --quiet -g \
   typescript \
   typescript-language-server \
   diagnostic-languageserver \
   eslint_d \
   pyright
 
+# Java 17 as recommended by Clojure:
+brew tap homebrew/cask-versions
+brew install --cask temurin17
+
+# Rust
+rustup-init -y
+
+# Scala
+cs setup
 
 ### Apple Settings ###
 

@@ -1,5 +1,9 @@
 source ~/.env
 
+#
+# ZSH Setup
+#
+
 ## Completion ##
 
 setopt AUTO_LIST
@@ -55,30 +59,17 @@ autoload -Uz zmv # Batch move and rename
 alias zmv='noglob zmv'
 
 
+#
+# Configuration
+#
 
-## Custom functions and aliases ##
+export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
 
-function gwta () {
-	# Create a git worktree under /repo-name.worktrees/ and pushd to it.
-	# Expects a bare repo to exist at /repo-name.worktrees/bare-repo.git
-	NEW_BRANCH=$1
-	EXISTING_BRANCH=${2:-origin/master}
-	WORKTREE_ROOT=$(pwd | sed 's/\(^.*\.worktrees\).*/\1/')
-	BARE_DIR="${WORKTREE_ROOT}/bare-repo.git"
-	if [ -d "${BARE_DIR}" ] 
-	then
-		pushd "${BARE_DIR}" > /dev/null
-		git worktree add -b "$NEW_BRANCH" "${WORKTREE_ROOT}/${NEW_BRANCH}" "$EXISTING_BRANCH" 
-		popd > /dev/null
-		pushd "${WORKTREE_ROOT}/${NEW_BRANCH}" 
-		if [ -d "${WORKTREE_ROOT}/${EXISTING_BRANCH}/node_modules" ]
-		then
-			ln -s "${WORKTREE_ROOT}/${EXISTING_BRANCH}/node_modules" .
-		fi
-	else
-		echo Cannot find root bare directory
-	fi
-}
+
+#
+# Custom tools and aliases
+#
+
 function napropos () {
 	npm run | grep $1 -A 1
 }
@@ -86,13 +77,24 @@ alias nr='npm run'
 alias g='git'
 alias v='nvim'
 alias l='ls'
-alias la='ls -A'
-alias ll='ls -lAh'
-alias readyit='time ( npm run format && npm run lint:ts:fix && npm run test:all ) ; say -v Karen task finished'
-alias testit='time npm run test:all; say -v Karen task finished'
-alias format='time ( npm run format && npm run lint:ts:fix ) ; say -v Karen task finished'
 
-export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
+
+
+function zarv() {
+	time "$@"
+	EXIT_CODE="$?"
+	say -v "Zarvox" "'$1' Process Finished: Exit code $EXIT_CODE"
+	return $EXIT_CODE
+}
+
+function cac() {
+	DIRS="$(find ~/code-a8c -name "$(echo "$*" | tr ' ' '*')*" -maxdepth 1 -type d)"
+	echo "$DIRS"
+	echo -n ':'
+	read -k 1 LNO
+	DIR="$(sed -n "$LNO p" <<<"$DIRS")"
+	cd "$DIR"
+}
 
 
 # Change directory to what Finder is looking at:
@@ -107,13 +109,16 @@ alias vzshrc='v ~/code-personal/dot-files/zshrc.main && source ~/code-personal/d
 alias vzshrcl='v ~/.zshrc && source ~/.zshrc'
 
 
+#
+# Auth
+#
+
 function op-open-and-fill() (
     local VAULT_UUID="$1"
     local ITEM_UUID="$2"
     local URL="$3"
-    local SHA256_URL="$(echo -n "$URL" | sha256sum | awk '{print $1;}')"
 
-    open "onepassword7://open_and_fill/$VAULT_UUID/$ITEM_UUID/$SHA256_URL"
+    open -g "https://$URL?$ITEM_UUID=$ITEM_UUID"
     # 1P needs a bit of time to do it's thing:
     sleep 3
 )
@@ -124,13 +129,13 @@ function op-ssh-add() (
 	
 	AUTH_TIMEOUT="${1:-1h}"
 	SSH_KEY_PATH="$2"
-	OP_ITEM_UUID="$3"
+	OP_ITEM_URL="$3"
 	
 	# This is all required to provide a password into SSH_ASKPASS
 	TEMP_OP_PW_SCRIPT_PATH=$(mktemp)
 	cat <<EOF > "$TEMP_OP_PW_SCRIPT_PATH"
 #!/bin/bash
-OP_SESSION_my="${OP_SESSION_my}" op get item "${OP_ITEM_UUID}" --fields password
+op read "${OP_ITEM_URL}"
 EOF
 
 	chmod u+x "$TEMP_OP_PW_SCRIPT_PATH"
@@ -139,3 +144,112 @@ EOF
 
 	rm "$TEMP_OP_PW_SCRIPT_PATH"
 )
+
+function op-autologin() (
+    # You need to use the 1Password command line tool to retrieve the vault UUID:
+    # https://support.1password.com/command-line-getting-started/
+    # $ op list vaults
+    # You can get item UUIDs, by turning on "Copy UUID" in 1Password > Prefs > Advanced.
+
+    # Add all the sites you'd like to log into here:
+    # You can set multiple websites for the same item in 1P (e.g. for your matticspace login):
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID matticspace.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID mc.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID code.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID logstash.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID opengrok.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID nexus.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID wpcom.trac.automattic.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID skein-wyeast.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID knox-wyeast.a8c.com
+    # These require clicking the loging button
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID airflow-wyeast.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID trino-wyeast.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID hue-wyeast.a8c.com
+    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID superset-wyeast.a8c.com
+)
+
+function auth () (
+    # Add my SSH keys
+    AUTH_TIMEOUT="${1:-1h}"
+
+    op-ssh-add "$AUTH_TIMEOUT" ~/.ssh/id_rsa_2022_02_14 "$ID_RSA_OP_URL"
+    op-ssh-add "$AUTH_TIMEOUT" ~/.ssh/id_rsa_automattic_2022_02_14 "$ID_RSA_A8C_OP_URL"
+    
+    # Restart AutoProxxy
+    killall AutoProxxy || true
+    open /Applications/AutoProxxy.app
+
+    sleep 5
+
+    op-autologin
+)
+
+
+#
+# A8C Specific (non-sensitive):
+# 
+
+alias wpcom-rsync="rsync -az --delete --delete-after \
+                  --exclude '.config' \
+                  --exclude '.svn' \
+                  --exclude '.git' \
+                  --exclude '.settings' \
+                  --exclude 'wp-content/themes' \
+                  --exclude 'wp-content/languages' \
+                  --exclude '*.png' \
+                  --exclude '*.jpeg' \
+                  --exclude '*.jpg' \
+                  --exclude '*.gif' \
+                  --exclude '*.mp3' \
+                  --exclude '*.mov' \
+                  --exclude '*.wav' \
+                  --exclude '*.tiff' \
+                  --exclude '.tags.*' \
+                  --exclude '.tags*' \
+                  --exclude '.tags' \
+                  --info=progress2"
+
+function wppull () {
+    wpcom-rsync wpcom-sandbox:/home/wpcom/public_html/ ~/code-a8c/wpcom/
+}
+
+function wppush () {
+    wpcom-rsync ~/code-a8c/wpcom/ wpcom-sandbox:/home/wpcom/public_html/
+}
+
+# Uploads any modified file to your sandbox
+function wpwatch () {
+	# path to your local copy of public_html folder
+	WORKDIR=~/code-a8c/wpcom
+	SANDBOX="wpcom-sandbox"
+
+	echo "Watching for changes on $WORKDIR"
+	start=0
+
+	current_OS=`uname`
+
+	if [[ $current_OS == "Darwin" ]]; then
+		fswatch -x $WORKDIR |
+		while read filepath flag1 flag2 flag3 flag4; do
+			now="$(date +"%s")"
+			if (( now-start > 2 )); then
+				relpath=${filepath#"$WORKDIR"}
+				echo "Uploading $relpath ... "
+				scp $filepath $SANDBOX:~/public_html$relpath
+				start="$(date +"%s")"
+			fi
+		done
+	else
+		inotifywait -rm $WORKDIR -e create,modify,move |
+		while read path action file; do
+			now="$(date +"%s")"
+			if (( now-start > 2 )); then
+				relpath=${path#"$WORKDIR"}
+				echo "Uploading $relpath$file ... "
+				scp $path$file $SANDBOX:~/public_html$relpath$file
+				start="$(date +"%s")"
+			fi
+		done
+	fi
+}

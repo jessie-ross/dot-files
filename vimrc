@@ -35,6 +35,8 @@ set ttyfast lazyredraw
 set scrolloff=10
 "set colorcolumn=81
 
+set cursorline
+
 set fileencodings=utf8 enc=utf8
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 set autoindent
@@ -109,8 +111,10 @@ Plug 'tpope/vim-surround' " dealing with quotes and brackets
 Plug 'tpope/vim-unimpaired' " yox and [x ]x
 Plug 'tpope/vim-vinegar' " netrw
 
+Plug 'junegunn/fzf'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/gv.vim'
+Plug 'junegunn/vim-easy-align'
 
 " https://github.com/NLKNguyen/papercolor-theme
 Plug 'NLKNguyen/papercolor-theme'
@@ -121,6 +125,10 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tommcdo/vim-exchange'
 
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
+
+Plug 'dln/avro-vim'
+
+"Plug 'MattesGroeger/vim-bookmarks'
 
 " Plug 'dense-analysis/ale'
 
@@ -136,8 +144,9 @@ if has('nvim')
     Plug 'neovim/nvim-lspconfig'
     Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-    Plug 'nvim-treesitter/playground'
+    " This isreaking for some reason
+    " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+    " Plug 'nvim-treesitter/playground'
 
     Plug 'github/copilot.vim'
 endif
@@ -213,8 +222,12 @@ let g:ale_fixers = {
 
 " let g:gutentags_project_root = ['.gutctags']
 " let g:gutentags_define_advanced_commands = 1
+"
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_sign = '♥'
 
-
+" avro-vim
+au BufRead,BufNewFile *.avdl setlocal filetype=avro-idl
 
 " ## Theming ##
 
@@ -273,7 +286,7 @@ nnoremap <leader>ww :w<CR>
 nnoremap <leader>wl :ls<CR>:b<space>
 
 " Best of vim vinegar
-nnoremap - :E<CR>
+nnoremap - :Explore<CR>
 let g:netrw_banner = 0
 
 
@@ -316,8 +329,8 @@ nmap <leader>wp :call WPComTrunkSaveSendAndTest()<CR>
 function! SyncSystemColorScheme(...)
     let s:new_bg = "light"
     if $TERM_PROGRAM ==? "Apple_Terminal"
-        let s:mode = systemlist("defaults read -g AppleInterfaceStyle")[0]
-        if s:mode ==? "dark"
+        let s:mode = systemlist("defaults read -g AppleInterfaceStyle 2&>/dev/null || echo Light")[0]
+        if s:mode ==? "Dark"
             let s:new_bg = "dark"
         else
             let s:new_bg = "light"
@@ -332,6 +345,9 @@ call timer_start(3000, "SyncSystemColorScheme", {"repeat": -1})
 
 
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
+
+autocmd FileType cucumber setlocal foldmethod=indent foldlevel=1
+
 " ## Notes ##
 
 " Change to current directory

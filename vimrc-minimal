@@ -1,0 +1,117 @@
+set autoindent
+set tags=~/tags
+syntax on
+
+
+" ## Basics: ##
+
+set nocompatible
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+set viminfo='20,\"1024
+set history=200
+set ruler
+
+set hlsearch incsearch ignorecase smartcase
+set showmatch
+
+" set autochdir
+
+" http://stackoverflow.com/questions/9511253/how-to-effectively-use-vim-wildmenu
+set wildmenu wildmode=list:longest,full
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.DS_Store,.*.un~,**/node_module/,**/.git/
+
+set visualbell
+if has('mouse')
+	set mouse=a
+endif
+" use system clipboard on OSX
+set clipboard=unnamed
+
+" don't limit window dimensions
+set winminwidth=0 winminheight=0
+set ttyfast lazyredraw
+
+" set splitbelow
+" set splitright
+
+set scrolloff=10
+"set colorcolumn=81
+
+set fileencodings=utf8 enc=utf8
+set expandtab tabstop=4 softtabstop=4 shiftwidth=4
+set autoindent
+
+set listchars=eol:⏎,tab:▸\ ,trail:·,nbsp:⎵
+
+set autoread
+" http://stackoverflow.com/questions/2490227/how-does-vims-autoread-work#20418591
+au FocusGained,BufEnter * :silent! !
+set hidden
+
+" File safety:
+if !isdirectory($HOME . "/.vim-tmp")
+    call mkdir($HOME . "/.vim-tmp/backup", "p", 0700)
+    call mkdir($HOME . "/.vim-tmp/swap", "p", 0700)
+    call mkdir($HOME . "/.vim-tmp/undo-nvim", "p", 0700)
+    call mkdir($HOME . "/.vim-tmp/undo-vim", "p", 0700)
+endif
+set backup
+set backupdir=~/.vim-tmp/backup//
+if has("persistent_undo")
+    set undofile
+    if has("nvim")
+        set undodir=~/.vim-tmp/undo-nvim//
+    else
+        set undodir=~/.vim-tmp/undo-vim//
+    endif
+endif
+" If we backup temporary files often automated editing tools like the crontab
+" editor get confused
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp/swap//
+
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
+
+" Ripgrep
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+set grepformat=%f:%l:%c:%m,%f:%l:%m
+
+" ## Custom and mapping ##
+
+
+let mapleader = ' '
+
+
+" Editing
+vnoremap <leader>p "_dP
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>Y gg"+yG
+
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Git
+nnoremap <leader>gg :Git<CR>
+nnoremap <leader>gv :GV<CR>
+
+" Buffers
+nnoremap <leader>wq :q<CR>
+nnoremap <leader>ww :w<CR>
+" Classic buffer switching
+nnoremap <leader>wl :ls<CR>:b<space>
+
+" The best parts of vim vinegar
+nnoremap - :E<CR>
+let g:netrw_banner = 0
+
+" Vim unimpaired
+nnoremap <silent> [q :cprevious<CR>
+nnoremap <silent> ]q :cnext<CR>

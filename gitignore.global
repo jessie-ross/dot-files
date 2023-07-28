@@ -4,3 +4,7 @@
 # Windows
 Thumbs.db
 
+tags.lock
+tags.temp
+/tags*
+/tags

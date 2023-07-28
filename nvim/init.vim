@@ -7,6 +7,7 @@ source ~/.vimrc
 " ## Telescope ##
 
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>
+nnoremap <leader>faf <cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true })<cr>
 nnoremap <leader>ft :Telescope<CR>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
@@ -68,7 +69,8 @@ EOF
 
 
 
-" ## LSP ##
+ "" ## LSP ##
+
 
 lua << EOF
 local lspconfig = require('lspconfig')
@@ -97,10 +99,10 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lrn', '<cmd>lua vim.lsp.buf.rename()<CR>', lsp_opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lca', '<cmd>lua vim.lsp.buf.code_action()<CR>', lsp_opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', lsp_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', lsp_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', lsp_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', lsp_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', lsp_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', lsp_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', lsp_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', lsp_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lq', '<cmd>lua vim.diagnostic.set_loclist()<CR>', lsp_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", lsp_opts)
 end
 
@@ -122,7 +124,7 @@ lspconfig.tsserver.setup({
     -- cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/usr/local/bin/tsserver-wrapper" },
     flags,
     on_attach = function(client, bufnr)
-        client.resolved_capabilities.document_formatting = false
+        client.server_capabilities.document_formatting = false
         on_attach(client, bufnr)
 
         ts_utils.setup(ts_utils_settings)
@@ -156,7 +158,7 @@ settings = {
 })
 
 -- Don't have a binary for this yet
-lspconfig.sumneko_lua.setup {
+lspconfig.lua_ls.setup {
     -- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
     on_attach = function(client, bufnr)
         on_attach(client, bufnr)
@@ -191,20 +193,21 @@ EOF
 
 
 " ## Treesitter ##
+" Disabled because it is broken 🙄
 
 lua << EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "javascript", "bash", "php", "java", "clojure", "elixir", "erlang", "json", "lua", "make", "php", "python", "typescript", "vim", "yaml" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  -- ignore_install = { "javascript" }, -- List of parsers to ignore installing
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-    -- disable = { "c", "rust" },  -- list of language that will be disabled
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    -- additional_vim_regex_highlighting = false,
-  },
-  indent = { enable = true },
-}
+-- require'nvim-treesitter.configs'.setup {
+--   ensure_installed = { "javascript", "bash", "php", "java", "clojure", "elixir", "erlang", "json", "lua", "make", "php", "python", "typescript", "vim", "yaml" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+--   -- ignore_install = { "javascript" }, -- List of parsers to ignore installing
+--   highlight = {
+--     enable = true,              -- false will disable the whole extension
+--     -- disable = { "c", "rust" },  -- list of language that will be disabled
+--     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+--     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+--     -- Using this option may slow down your editor, and you may see some duplicate highlights.
+--     -- Instead of true it can also be a list of languages
+--     -- additional_vim_regex_highlighting = false,
+--   },
+--   indent = { enable = true },
+-- }
 EOF
