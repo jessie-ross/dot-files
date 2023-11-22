@@ -76,6 +76,7 @@ function napropos () {
 alias nr='npm run'
 alias g='git'
 alias v='nvim'
+alias vim='nvim'
 alias l='ls'
 
 
@@ -94,6 +95,7 @@ function cac() {
 	read -k 1 LNO
 	DIR="$(sed -n "$LNO p" <<<"$DIRS")"
 	cd "$DIR"
+	v .
 }
 
 
@@ -145,8 +147,8 @@ EOF
 	rm "$TEMP_OP_PW_SCRIPT_PATH"
 )
 
-function op-autologin() (
     # You need to use the 1Password command line tool to retrieve the vault UUID:
+    function _op-autologin() (
     # https://support.1password.com/command-line-getting-started/
     # $ op list vaults
     # You can get item UUIDs, by turning on "Copy UUID" in 1Password > Prefs > Advanced.
@@ -169,7 +171,7 @@ function op-autologin() (
     op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID superset-wyeast.a8c.com
 )
 
-function auth () (
+function _auth () (
     # Add my SSH keys
     AUTH_TIMEOUT="${1:-1h}"
 
@@ -209,6 +211,22 @@ alias wpcom-rsync="rsync -az --delete --delete-after \
                   --exclude '.tags*' \
                   --exclude '.tags' \
                   --info=progress2"
+
+function fomopull () {
+    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/p2fomo/ '/Users/j/code-a8c/p2fomo/'
+}
+
+function fomopush () {
+    wpcom-rsync '/Users/j/code-a8c/p2fomo/' wpcom-sandbox:/home/missioncontrol/public_html/p2fomo/
+}
+
+function mcpull () {
+    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/ ~/code-a8c/missioncontrol/
+}
+
+function mcpush () {
+    wpcom-rsync ~/code-a8c/missioncontrol/ wpcom-sandbox:/home/missioncontrol/public_html/
+}
 
 function wppull () {
     wpcom-rsync wpcom-sandbox:/home/wpcom/public_html/ ~/code-a8c/wpcom/

@@ -157,6 +157,29 @@ settings = {
     end,
 })
 
+
+-- nvim-metals
+metals_config = require'metals'.bare_config()
+metals_config.settings = {
+ showImplicitArguments = true,
+ excludedPackages = {
+   -- "akka.actor.typed.javadsl",
+   -- "com.github.swagger.akka.javadsl"
+ }
+}
+
+metals_config.on_attach = function()
+require'completion'.on_attach();
+end
+
+metals_config.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+vim.lsp.diagnostic.on_publish_diagnostics, {
+  virtual_text = {
+    prefix = '',
+  }
+}
+)
+
 -- Don't have a binary for this yet
 lspconfig.lua_ls.setup {
     -- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};

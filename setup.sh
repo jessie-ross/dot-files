@@ -27,14 +27,12 @@ fi
 
 brew install --cask --quiet \
 	1password \
-	1password-cli \
 	alfred \
 	anki \
 	dash \
 	docker \
 	firefox \
 	flux \
-	messenger \
 	miniconda \
 	rstudio \
 	signal \
@@ -47,9 +45,9 @@ brew install --cask --quiet \
 	zoom
 
 brew install --quiet \
+	1password-cli \
 	clojure/tools/clojure \
 	coreutils \
-	coursier/formulas/coursier \
 	findutils \
 	fzf \
 	gh \
@@ -100,9 +98,6 @@ brew install --cask temurin17
 # Rust
 rustup-init -y
 
-# Scala
-cs setup
-
 ### Apple Settings ###
 
 # Disable “Press and Hold Keys”: 
@@ -151,6 +146,9 @@ defaults write com.apple.screencapture location -string "${HOME}/Screenshots"
 # Show remaining battery time; hide percentage
 defaults write com.apple.menuextra.battery ShowPercent -string "NO"
 defaults write com.apple.menuextra.battery ShowTime -string "YES"
+
+# Disable app reopen after restart
+defaults write -g ApplePersistence -bool no
 
 echo
 echo '######################################################'

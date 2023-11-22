@@ -149,6 +149,8 @@ if has('nvim')
     " Plug 'nvim-treesitter/playground'
 
     Plug 'github/copilot.vim'
+
+    Plug 'scalameta/nvim-metals'
 endif
 
 " Initialize plugin system
