@@ -87,6 +87,7 @@ local on_attach = function(client, bufnr)
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
+
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', lsp_opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', lsp_opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', lsp_opts)
@@ -159,26 +160,38 @@ settings = {
 
 
 -- nvim-metals
-metals_config = require'metals'.bare_config()
-metals_config.settings = {
- showImplicitArguments = true,
- excludedPackages = {
-   -- "akka.actor.typed.javadsl",
-   -- "com.github.swagger.akka.javadsl"
- }
-}
+local generate_metals_config = function ()
+    metals_config = require'metals'.bare_config()
+    metals_config.settings = {
+     showImplicitArguments = true,
+     excludedPackages = {
+     }
+    }
 
-metals_config.on_attach = function()
-require'completion'.on_attach();
+    metals_config.on_attach = function(client, bufnr)
+        on_attach(client, bufnr);
+        -- require'completion'.on_attach();
+    end
+
+    metals_config.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+        vim.lsp.diagnostic.on_publish_diagnostics, {
+          virtual_text = {
+            prefix = '',
+          }
+        }
+    )
+
+    return metals_config
 end
 
-metals_config.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-vim.lsp.diagnostic.on_publish_diagnostics, {
-  virtual_text = {
-    prefix = '',
-  }
-}
-)
+local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala", "sbt", "java" },
+  callback = function()
+    require("metals").initialize_or_attach(generate_metals_config())
+  end,
+  group = nvim_metals_group,
+})
 
 -- Don't have a binary for this yet
 lspconfig.lua_ls.setup {

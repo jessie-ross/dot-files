@@ -37,7 +37,6 @@ brew install --cask --quiet \
 	rstudio \
 	signal \
 	slack \
-	spotify \
 	textual \
 	whatsapp \
 	unison \
@@ -149,6 +148,9 @@ defaults write com.apple.menuextra.battery ShowTime -string "YES"
 
 # Disable app reopen after restart
 defaults write -g ApplePersistence -bool no
+
+# Disable asking for dictation
+defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 0
 
 echo
 echo '######################################################'

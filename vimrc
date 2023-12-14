@@ -261,9 +261,7 @@ endif
 
 " ## Custom and mapping ##
 
-
 let mapleader = ' '
-
 
 " Editing
 vnoremap <leader>p "_dP
@@ -272,7 +270,7 @@ vnoremap <leader>d "_d
 
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
-nnoremap <leader>Y gg"+yG
+nnoremap <leader>Y gg"+yG<C-o>
 
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -280,6 +278,15 @@ vnoremap K :m '<-2<CR>gv=gv
 " Git
 nnoremap <leader>gg :Git<CR>
 nnoremap <leader>gv :GV<CR>
+
+" GitHub
+function! YankGitHubUrl() range
+    let url = system('gh browse -n ' . expand('%') . ':' . a:firstline . '-' . a:lastline)
+    echomsg url
+    let @+ = url
+endfunction
+command! -range YankGitHubUrl <line1>,<line2>call YankGitHubUrl()
+noremap <leader>gy :YankGitHubUrl<CR>
 
 " Buffers
 nnoremap <leader>wq :q<CR>

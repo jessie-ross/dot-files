@@ -1,10 +1,20 @@
+nogit-*
+nogit_*
+
 # Mac
 .DS_Store
 
 # Windows
 Thumbs.db
 
+# Tags
 tags.lock
 tags.temp
 /tags*
 /tags
+
+# Scala
+.metals/
+.bloop/
+.ammonite/
+metals.sbt
