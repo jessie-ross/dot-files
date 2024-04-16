@@ -34,7 +34,6 @@ brew install --cask --quiet \
 	firefox \
 	flux \
 	miniconda \
-	obs \
 	rstudio \
 	signal \
 	slack \
