@@ -77,6 +77,7 @@ alias v='nvim'
 alias vim='nvim'
 alias l='ls'
 
+alias mtime='stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S"'
 
 
 function zarv() {
@@ -267,6 +268,19 @@ function wpwatch () {
 			fi
 		done
 	fi
+}
+
+function gst () {
+	echo "-------------------"
+	echo
+	for P in "$1"*; do
+		echo "$P:"
+		echo
+		git --git-dir="$P/.git" --work-tree="$P" status
+		echo
+		echo "-------------------"
+		echo
+	done
 }
 
 HADOOP_PROXY_DOCKER_RUN_EXTRA_ARGS="--mount type=bind,src="${HOME}/.bash_aliases",dst=/home/remote-user/.bash_aliases,readonly"

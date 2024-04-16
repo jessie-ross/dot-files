@@ -18,7 +18,7 @@
     wt = worktree
     st = status
     fa = fetch --all
-    c = commit
+	c = commit
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
@@ -28,3 +28,5 @@
     defaultBranch = trunk
 [rerere]
     enabled = true
+[rebase]
+	autoStash = true
