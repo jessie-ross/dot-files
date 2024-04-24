@@ -30,3 +30,6 @@
     enabled = true
 [rebase]
 	autoStash = true
+[status]
+	short = true
+	branch = true

@@ -273,7 +273,7 @@ function wpwatch () {
 function gst () {
 	echo "-------------------"
 	echo
-	for P in "$1"*; do
+	for P in ~/code-a8c/"$1"*; do
 		echo "$P:"
 		echo
 		git --git-dir="$P/.git" --work-tree="$P" status
