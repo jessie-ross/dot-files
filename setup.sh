@@ -206,22 +206,22 @@ defaults write com.apple.finder QLEnableTextSelection -bool TRUE
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 # Enable the Develop menu and the Web Inspector in Safari
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+sudo defaults write com.apple.Safari IncludeDevelopMenu -bool true
+sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+sudo defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 
 # Enable Safari’s debug menu
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+sudo defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
 
 # Press Tab to highlight each item on a web page
-defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
+sudo defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
+sudo defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
 
 # Make Safari’s search banners default to Contains instead of Starts With
-defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
+sudo defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
 
 # Show the full URL in the address bar (note: this still hides the scheme)
-defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+sudo defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
 
 
 #### Mac App Store ####
