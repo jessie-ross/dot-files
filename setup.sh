@@ -80,8 +80,7 @@ volta run npm install --quiet -g \
   eslint_d \
   pyright
 
-# Java 17 as recommended by Clojure:
-brew tap homebrew/cask-versions
+# Java as recommended by Clojure:
 brew install --cask temurin@21
 
 # Rust
