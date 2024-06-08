@@ -111,82 +111,6 @@ alias vzshrcl='v ~/.zshrc && source ~/.zshrc'
 
 
 #
-# Auth
-#
-
-function op-open-and-fill() (
-    local VAULT_UUID="$1"
-    local ITEM_UUID="$2"
-    local URL="$3"
-
-    open -g "https://$URL?$ITEM_UUID=$ITEM_UUID"
-    # 1P needs a bit of time to do it's thing:
-    sleep 3
-)
-
-
-function op-ssh-add() (
-	# Requires $OP_SESSION_my to be set
-	
-	AUTH_TIMEOUT="${1:-1h}"
-	SSH_KEY_PATH="$2"
-	OP_ITEM_URL="$3"
-	
-	# This is all required to provide a password into SSH_ASKPASS
-	TEMP_OP_PW_SCRIPT_PATH=$(mktemp)
-	cat <<EOF > "$TEMP_OP_PW_SCRIPT_PATH"
-#!/bin/bash
-op read "${OP_ITEM_URL}"
-EOF
-
-	chmod u+x "$TEMP_OP_PW_SCRIPT_PATH"
-
-	DISPLAY=1 SSH_ASKPASS="${TEMP_OP_PW_SCRIPT_PATH}" ssh-add -t "${AUTH_TIMEOUT}" "${SSH_KEY_PATH}" < /dev/null
-
-	rm "$TEMP_OP_PW_SCRIPT_PATH"
-)
-
-    # You need to use the 1Password command line tool to retrieve the vault UUID:
-function _op-autologin() (
-    # https://support.1password.com/command-line-getting-started/
-    # $ op list vaults
-    # You can get item UUIDs, by turning on "Copy UUID" in 1Password > Prefs > Advanced.
-
-    # Add all the sites you'd like to log into here:
-    # You can set multiple websites for the same item in 1P (e.g. for your matticspace login):
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID matticspace.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID mc.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID code.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID logstash.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID opengrok.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID nexus.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID wpcom.trac.automattic.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID skein-wyeast.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID knox-wyeast.a8c.com
-    # These require clicking the loging button
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID airflow-wyeast.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID trino-wyeast.a8c.com
-    op-open-and-fill $A8C_VAULT_UUID $MATTICSPACE_ITEM_UUID superset-wyeast.a8c.com
-)
-
-function _auth () (
-    # Add my SSH keys
-    AUTH_TIMEOUT="${1:-1h}"
-
-    op-ssh-add "$AUTH_TIMEOUT" ~/.ssh/id_rsa_2022_02_14 "$ID_RSA_OP_URL"
-    op-ssh-add "$AUTH_TIMEOUT" ~/.ssh/id_rsa_automattic_2022_02_14 "$ID_RSA_A8C_OP_URL"
-    
-    # Restart AutoProxxy
-    killall AutoProxxy || true
-    open /Applications/AutoProxxy.app
-
-    sleep 5
-
-    # op-autologin
-)
-
-
-#
 # A8C Specific (non-sensitive):
 # 
 
@@ -209,14 +133,6 @@ alias wpcom-rsync="rsync -az --delete --delete-after \
                   --exclude '.tags*' \
                   --exclude '.tags' \
                   --info=progress2"
-
-function fomopull () {
-    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/p2fomo/ '/Users/j/code-a8c/p2fomo/'
-}
-
-function fomopush () {
-    wpcom-rsync '/Users/j/code-a8c/p2fomo/' wpcom-sandbox:/home/missioncontrol/public_html/p2fomo/
-}
 
 function mcpull () {
     wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/ ~/code-a8c/missioncontrol/
