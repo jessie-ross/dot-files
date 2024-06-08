@@ -39,6 +39,8 @@ fi
 # 	textual \
 # 	zoom
 
+# Install dropbox for alfred + dash preferences
+
 brew install --quiet \
 	1password-cli \
 	clojure/tools/clojure \
