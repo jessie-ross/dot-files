@@ -25,23 +25,24 @@ then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-brew install --cask --quiet \
-	1password \
-	alfred \
-	anki \
-	dash \
-	docker \
-	firefox \
-	flux \
-	miniconda \
-	rstudio \
-	signal \
-	slack \
-	textual \
-	whatsapp \
-	unison \
-	vlc \
-	zoom
+# Install via app store
+# brew install --cask --quiet \
+# 	1password \
+# 	alfred \
+# 	anki \
+# 	dash \
+# 	docker \
+# 	firefox \
+# 	flux \
+# 	miniconda \
+# 	rstudio \
+# 	signal \
+# 	slack \
+# 	textual \
+# 	whatsapp \
+# 	unison \
+# 	vlc \
+# 	zoom
 
 brew install --quiet \
 	1password-cli \

@@ -147,7 +147,7 @@ EOF
 )
 
     # You need to use the 1Password command line tool to retrieve the vault UUID:
-    function _op-autologin() (
+function _op-autologin() (
     # https://support.1password.com/command-line-getting-started/
     # $ op list vaults
     # You can get item UUIDs, by turning on "Copy UUID" in 1Password > Prefs > Advanced.
@@ -182,7 +182,7 @@ function _auth () (
 
     sleep 5
 
-    op-autologin
+    # op-autologin
 )
 
 
@@ -272,15 +272,26 @@ function wpwatch () {
 
 function gst () {
 	echo "-------------------"
-	echo
 	for P in ~/code-a8c/"$1"*; do
-		echo "$P:"
-		echo
+		echo "# $P:"
 		git --git-dir="$P/.git" --work-tree="$P" status
-		echo
 		echo "-------------------"
-		echo
 	done
+}
+
+function gc () {
+    REPO="$1"
+    N="${"${2}":-0}"
+    pushd ~/code-a8c/$REPO*-0$N/
+    update_terminal_cwd
+}
+
+function gv () {
+    REPO="$1"
+    N="${"${2}":-0}"
+    pushd ~/code-a8c/$REPO*-0$N/
+    update_terminal_cwd
+    vim .
 }
 
 HADOOP_PROXY_DOCKER_RUN_EXTRA_ARGS="--mount type=bind,src="${HOME}/.bash_aliases",dst=/home/remote-user/.bash_aliases,readonly"
