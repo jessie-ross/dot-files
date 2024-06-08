@@ -1,0 +1,10 @@
+Host *
+    IdentitiesOnly yes
+    # I manually add my keys
+    UseRoaming no
+    AddKeysToAgent no
+    ForwardAgent no
+    TCPKeepAlive no
+    ServerAliveCountMax 30
+    ServerAliveInterval 20
+    Compression yes

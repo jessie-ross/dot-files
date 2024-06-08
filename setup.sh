@@ -262,6 +262,8 @@ if [ ! -d ~/code-personal/dot-files ] ; then
   (
     cd ~/code-personal
     git clone https://github.com/jessie-ross/dot-files.git
+    cd dot-files
+    git remote set-url origin git@github.com:jessie-ross/dot-files.git
   )
 fi
 

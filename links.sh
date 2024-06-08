@@ -38,6 +38,15 @@ ln -sh "${SCRIPT_DIR}/gitconfig" ~/.gitconfig
 ln -sh "${SCRIPT_DIR}/gitignore.global" ~/.gitignore.global
 
 
+## SSH ##
+
+if [ ! -f ~/.ssh/config ]; then
+    cp "${SCRIPT_DIR}/ssh/config.default" ~/.ssh/config
+fi
+if [ ! -d ~/.ssh/config.d ]; then
+    cp -r "${SCRIPT_DIR}/ssh/config.d.default" ~/.ssh/config.d
+fi
+
 
 ## Other ##
 
