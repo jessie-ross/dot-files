@@ -5,7 +5,6 @@ set -o noclobber
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 
-
 ## Vim/Neovim ##
 
 mkdir -p ~/.config
@@ -13,7 +12,6 @@ ln -sh "${SCRIPT_DIR}/nvim" ~/.config/nvim
 ln -sh "${SCRIPT_DIR}/vim" ~/.vim
 ln -sh "${SCRIPT_DIR}/vimrc" ~/.vimrc
 ln -sh "${SCRIPT_DIR}/ideavimrc" ~/.ideavimrc
-
 
 
 ## Zshrc ##
@@ -31,6 +29,7 @@ if [ ! -f ~/.env ] ; then
 fi
 
 ln -sh "${SCRIPT_DIR}/env.main" ~/.env.main
+
 
 ## Git ##
 
