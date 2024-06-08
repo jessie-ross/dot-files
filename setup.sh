@@ -25,23 +25,18 @@ then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Install via app store
+# Install via app store as much as possible:
+
 # brew install --cask --quiet \
 # 	1password \
 # 	alfred \
-# 	anki \
 # 	dash \
 # 	docker \
 # 	firefox \
 # 	flux \
-# 	miniconda \
-# 	rstudio \
-# 	signal \
 # 	slack \
+# 	texts \
 # 	textual \
-# 	whatsapp \
-# 	unison \
-# 	vlc \
 # 	zoom
 
 brew install --quiet \
@@ -54,21 +49,15 @@ brew install --quiet \
 	gnu-tar \
 	gnu-sed \
 	gawk \
-	graphviz \
 	grep \
 	git \
-	git-gui \
-	httpie \
-	jq \
-	r \
 	ripgrep \
 	rsync \
-	leiningen \
 	lua-language-server \
 	neovim \
 	nvm \
 	poetry \
-	python@3.8 \
+	python@3.12 \
 	rustup \
 	swi-prolog \
 	tree-sitter \
@@ -93,7 +82,7 @@ volta run npm install --quiet -g \
 
 # Java 17 as recommended by Clojure:
 brew tap homebrew/cask-versions
-brew install --cask temurin17
+brew install --cask temurin@21
 
 # Rust
 rustup-init -y
