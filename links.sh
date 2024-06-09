@@ -39,6 +39,7 @@ ln -sh "${SCRIPT_DIR}/gitignore.global" ~/.gitignore.global
 
 ## SSH ##
 
+mkdir -p ~/.ssh
 if [ ! -f ~/.ssh/config ]; then
     cp "${SCRIPT_DIR}/ssh/config.default" ~/.ssh/config
 fi
