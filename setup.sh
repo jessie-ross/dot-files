@@ -274,4 +274,4 @@ fi
   ./links.sh
 )
 
-echo Some of these changes require a reboot to take affect.
+echo Some of these changes require a reboot to take effect.
