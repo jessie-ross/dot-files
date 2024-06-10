@@ -211,3 +211,5 @@ function gv () {
 }
 
 HADOOP_PROXY_DOCKER_RUN_EXTRA_ARGS="--mount type=bind,src="${HOME}/.bash_aliases",dst=/home/remote-user/.bash_aliases,readonly"
+
+PIPENV_CMD="pipx run pipenv"

@@ -51,6 +51,9 @@ brew install --quiet \
 	neovim \
 	nvm \
 	poetry \
+	pyenv \
+	python@3.10 \
+	python@3.11 \
 	python@3.12 \
 	pipx \
 	rustup \
@@ -200,23 +203,23 @@ defaults write com.apple.finder QLEnableTextSelection -bool TRUE
 # Add a context menu item for showing the Web Inspector in web views
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
-# Enable the Develop menu and the Web Inspector in Safari
-sudo defaults write com.apple.Safari IncludeDevelopMenu -bool true
-sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-sudo defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+# # Enable the Develop menu and the Web Inspector in Safari
+# sudo defaults write com.apple.Safari IncludeDevelopMenu -bool true
+# sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+# sudo defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 
-# Enable Safari’s debug menu
-sudo defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+# # Enable Safari’s debug menu
+# sudo defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
 
-# Press Tab to highlight each item on a web page
-sudo defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
-sudo defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
+# # Press Tab to highlight each item on a web page
+# sudo defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
+# sudo defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
 
-# Make Safari’s search banners default to Contains instead of Starts With
-sudo defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
+# # Make Safari’s search banners default to Contains instead of Starts With
+# sudo defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
 
-# Show the full URL in the address bar (note: this still hides the scheme)
-sudo defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+# # Show the full URL in the address bar (note: this still hides the scheme)
+# sudo defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
 
 
 #### Mac App Store ####
