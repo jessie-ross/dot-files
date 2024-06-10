@@ -8,21 +8,14 @@ set -e
 # settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
 
-# Ask for the administrator password upfront
-sudo -v
-
-# Keep-alive: update existing `sudo` time stamp until `.macos` has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
 
 ### Homebrew and Cask Apps ###
 
 if ! which brew > /dev/null
 then
-	echo "Installing Homebrew"
-	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-	echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-	eval "$(/opt/homebrew/bin/brew shellenv)"
+	echo "Homebrew is required:"
+	echo "https://brew.sh/"
+	exit 1
 fi
 
 # Install via app store as much as possible:
@@ -42,7 +35,6 @@ fi
 # Install dropbox for alfred + dash preferences
 
 brew install --quiet \
-	1password-cli \
 	clojure/tools/clojure \
 	coreutils \
 	findutils \
@@ -60,6 +52,7 @@ brew install --quiet \
 	nvm \
 	poetry \
 	python@3.12 \
+	pipx \
 	rustup \
 	swi-prolog \
 	tree-sitter \
