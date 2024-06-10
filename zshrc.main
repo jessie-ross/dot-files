@@ -88,7 +88,7 @@ function zarv() {
 }
 
 function cac() {
-	DIRS="$(find ~/code-a8c -name "$(echo "$*" | tr ' ' '*')*" -maxdepth 1 -type d)"
+	DIRS="$(find ~/code-primary -name "$(echo "$*" | tr ' ' '*')*" -maxdepth 1 -type d)"
 	echo "$DIRS"
 	echo -n ':'
 	read -k 1 LNO
@@ -135,25 +135,25 @@ alias wpcom-rsync="rsync -az --delete --delete-after \
                   --info=progress2"
 
 function mcpull () {
-    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/ ~/code-a8c/missioncontrol/
+    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/ ~/code-primary/missioncontrol/
 }
 
 function mcpush () {
-    wpcom-rsync ~/code-a8c/missioncontrol/ wpcom-sandbox:/home/missioncontrol/public_html/
+    wpcom-rsync ~/code-primary/missioncontrol/ wpcom-sandbox:/home/missioncontrol/public_html/
 }
 
 function wppull () {
-    wpcom-rsync wpcom-sandbox:/home/wpcom/public_html/ ~/code-a8c/wpcom/
+    wpcom-rsync wpcom-sandbox:/home/wpcom/public_html/ ~/code-primary/wpcom/
 }
 
 function wppush () {
-    wpcom-rsync ~/code-a8c/wpcom/ wpcom-sandbox:/home/wpcom/public_html/
+    wpcom-rsync ~/code-primary/wpcom/ wpcom-sandbox:/home/wpcom/public_html/
 }
 
 # Uploads any modified file to your sandbox
 function wpwatch () {
 	# path to your local copy of public_html folder
-	WORKDIR=~/code-a8c/wpcom
+	WORKDIR=~/code-primary/wpcom
 	SANDBOX="wpcom-sandbox"
 
 	echo "Watching for changes on $WORKDIR"
@@ -188,7 +188,7 @@ function wpwatch () {
 
 function gst () {
 	echo "-------------------"
-	for P in ~/code-a8c/"$1"*; do
+	for P in ~/code-primary/"$1"*; do
 		echo "# $P:"
 		git --git-dir="$P/.git" --work-tree="$P" status
 		echo "-------------------"
@@ -198,14 +198,14 @@ function gst () {
 function gc () {
     REPO="$1"
     N="${"${2}":-0}"
-    pushd ~/code-a8c/$REPO*-0$N/
+    pushd ~/code-primary/$REPO*-0$N/
     update_terminal_cwd
 }
 
 function gv () {
     REPO="$1"
     N="${"${2}":-0}"
-    pushd ~/code-a8c/$REPO*-0$N/
+    pushd ~/code-primary/$REPO*-0$N/
     update_terminal_cwd
     vim .
 }
