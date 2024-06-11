@@ -37,6 +37,16 @@ set scrolloff=10
 
 set cursorline
 
+set background=light
+set noshowmode 
+set showcmd
+set showtabline=1
+set guioptions-=e
+set laststatus=2 
+if has("nvim")
+    set laststatus=3 " Only show statusline at the bottom window
+endif
+
 set fileencodings=utf8 enc=utf8
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 set autoindent
@@ -95,17 +105,21 @@ endif
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 
-" https://github.com/itchyny/lightline.vim
-Plug 'itchyny/lightline.vim', { 'commit': '58c97bc' }
-
 " tpope fan club
 Plug 'tpope/vim-abolish' " better find and replace
+Plug 'tpope/vim-characterize' " ga for character inspection
 Plug 'tpope/vim-commentary' " comments
+Plug 'tpope/vim-dadbod' " db management in vim
+Plug 'tpope/vim-dispatch' " async builds
+Plug 'tpope/vim-endwise' " complete if, do, def
 Plug 'tpope/vim-eunuch' " unix tools
 Plug 'tpope/vim-fireplace' " clojure
+Plug 'tpope/vim-flagship' " statusline
 Plug 'tpope/vim-fugitive' " git
 Plug 'tpope/vim-repeat' " make repeat work with other things
+Plug 'tpope/vim-rhubarb' " github
 Plug 'tpope/vim-rsi' " readline shortcuts
+Plug 'tpope/vim-scriptease' " vim plugin creation tools
 Plug 'tpope/vim-sleuth' " guess file tab/spaces
 Plug 'tpope/vim-surround' " dealing with quotes and brackets
 Plug 'tpope/vim-unimpaired' " yox and [x ]x
@@ -152,69 +166,6 @@ call plug#end()
 
 let g:goyo_width=130
 
-" Ale - Automatic Linting/Fixing.
-let g:ale_fix_on_save = 0
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_javascript_prettier_use_local_config = 1
-let g:airline#extensions#ale#enabled = 1
-
-command! ALEToggleFixer execute "let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0) ? 0 : 1 | echo g:ale_fix_on_save"
-nnoremap yof :ALEToggleFixer<cr>
-
-let g:ale_linter_aliases = {'pandoc': ['markdown']}
-let g:ale_linters = {
-  \   'elixir': ['credo', 'mix'],
-  \   'perl6': ['perl6'],
-  \}
-let g:ale_php_phpcbf_use_global = 1
-let g:ale_php_phpcs_use_global = 1
-let g:ale_fixers = {
-  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \   'php': [
-  \       'phpcbf'
-  \   ],
-  \   'typescript': [
-  \       'prettier', 'eslint'
-  \   ],
-  \   'typescriptreact': [
-  \       'prettier', 'eslint'
-  \   ],
-  \   'javascript': [
-  \       'prettier', 'eslint'
-  \   ],
-  \   'javascriptreact': [
-  \       'prettier', 'eslint'
-  \   ],
-  \   'go': [
-  \       'gofmt', 'goimports'
-  \   ],
-  \   'markdown': [
-  \       'prettier', 'eslint'
-  \   ],
-  \   'pandoc': [
-  \       'prettier',
-  \   ],
-  \   'elixir': [
-  \       'mix_format',
-  \   ],
-  \   'haskell': [
-  \       'brittany',
-  \   ],
-  \   'rust': [
-  \       'rustfmt',
-  \   ],
-  \   'python': [
-  \       'black',
-  \   ],
-  \   'ruby': ['prettier'],
-  \}
-
-
-" let g:gutentags_project_root = ['.gutctags']
-" let g:gutentags_define_advanced_commands = 1
-"
 let g:bookmark_save_per_working_dir = 1
 let g:bookmark_sign = '♥'
 
@@ -223,30 +174,8 @@ au BufRead,BufNewFile *.avdl setlocal filetype=avro-idl
 
 " ## Theming ##
 
-" if has('nvim')
-"     set termguicolors
-" endif
 syntax enable
 colorscheme PaperColor
-set t_Co=256   " This is may or may not needed.
-set background=light
-let g:lightline = {
-      \ 'colorscheme': 'PaperColor_light',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'absolutepath', 'modified' ] ]
-      \ }
-      \ }
-" set cursorline
-set noshowmode showcmd
-" StatusLine always visible, display full path
-" http://learnvimscriptthehardway.stevelosh.com/chapters/17.html
-set laststatus=2 statusline=%F
-if has("nvim")
-    set laststatus=3
-endif
-
-
 
 
 " ## Custom and mapping ##
@@ -269,15 +198,6 @@ vnoremap K :m '<-2<CR>gv=gv
 nnoremap <leader>gg :Git<CR>
 nnoremap <leader>gv :GV<CR>
 
-" GitHub
-function! YankGitHubUrl() range
-    let url = system('gh browse -n ' . expand('%') . ':' . a:firstline . '-' . a:lastline)
-    echomsg url
-    let @+ = url
-endfunction
-command! -range YankGitHubUrl <line1>,<line2>call YankGitHubUrl()
-noremap <leader>gy :YankGitHubUrl<CR>
-
 " Buffers
 nnoremap <leader>wq :q<CR>
 nnoremap <leader>ww :w<CR>
@@ -297,7 +217,6 @@ if has("autocmd")
   augroup myvimrchooks
     au!
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc,init.vim nested source $MYVIMRC | echo 'Reloaded vimrc'
-    call lightline#enable()
   augroup END
 endif
 
