@@ -96,7 +96,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " https://github.com/itchyny/lightline.vim
-Plug 'itchyny/lightline.vim'
+Plug 'itchyny/lightline.vim', { 'commit': '58c97bc' }
 
 " tpope fan club
 Plug 'tpope/vim-abolish' " better find and replace
@@ -117,40 +117,30 @@ Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
 
 " https://github.com/NLKNguyen/papercolor-theme
-Plug 'NLKNguyen/papercolor-theme'
+Plug 'NLKNguyen/papercolor-theme', { 'commit': '0cfe64f' }
 
 " https://github.com/airblade/vim-gitgutter
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', { 'commit': 'e801371' }
 
-Plug 'tommcdo/vim-exchange'
+Plug 'tommcdo/vim-exchange', { 'commit': 'd6c1e97' }
 
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 
-Plug 'dln/avro-vim'
-
-"Plug 'MattesGroeger/vim-bookmarks'
-
-" Plug 'dense-analysis/ale'
-
-" Plug 'ludovicchabant/vim-gutentags'
+Plug 'dln/avro-vim', { 'commit': '3af1c69' }
 
 if has('nvim')
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-telescope/telescope-fzy-native.nvim'
-    Plug 'ryanoasis/vim-devicons'
 
     Plug 'neovim/nvim-lspconfig'
-    Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+    " TODO: Replace
+    Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', { 'commit': '0a6a16e' }
 
     " This isreaking for some reason
     " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     " Plug 'nvim-treesitter/playground'
-
-    Plug 'github/copilot.vim'
-
-    Plug 'scalameta/nvim-metals'
 endif
 
 " Initialize plugin system

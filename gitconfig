@@ -7,7 +7,7 @@
 [core]
     excludesfile = ~/.gitignore.global
 [push]
-    default = current
+	default = current
 [pull]
     ff = only
     rebase = merges
