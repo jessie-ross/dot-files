@@ -116,10 +116,13 @@ Plug 'tpope/vim-eunuch' " unix tools
 Plug 'tpope/vim-fireplace' " clojure
 Plug 'tpope/vim-flagship' " statusline
 Plug 'tpope/vim-fugitive' " git
+Plug 'tpope/vim-jdaddy' " json aj, gqaj, gqij
+Plug 'tpope/vim-ragtag' " html/xml/php/etc
 Plug 'tpope/vim-repeat' " make repeat work with other things
 Plug 'tpope/vim-rhubarb' " github
 Plug 'tpope/vim-rsi' " readline shortcuts
 Plug 'tpope/vim-scriptease' " vim plugin creation tools
+" Plug 'tpope/vim-sexp-mappings-for-regular-people' 
 Plug 'tpope/vim-sleuth' " guess file tab/spaces
 Plug 'tpope/vim-surround' " dealing with quotes and brackets
 Plug 'tpope/vim-unimpaired' " yox and [x ]x
@@ -129,6 +132,8 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
+
+Plug 'guns/vim-sexp', { 'commit': '14464d4' }
 
 " https://github.com/NLKNguyen/papercolor-theme
 Plug 'NLKNguyen/papercolor-theme', { 'commit': '0cfe64f' }
