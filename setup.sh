@@ -50,6 +50,7 @@ brew install --quiet \
 	lua-language-server \
 	neovim \
 	nvm \
+	parallel \
 	poetry \
 	pyenv \
 	python@3.10 \
@@ -60,7 +61,8 @@ brew install --quiet \
 	swi-prolog \
 	tree-sitter \
 	universal-ctags \
-	volta
+	volta \
+	weechat
 
 # NPM
 export VOLTA_HOME="$HOME/.volta"

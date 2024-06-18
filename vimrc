@@ -29,8 +29,9 @@ set clipboard=unnamed
 set winminwidth=0 winminheight=0
 set ttyfast lazyredraw
 
-" set splitbelow
-" set splitright
+set splitbelow
+set splitright
+
 
 set scrolloff=10
 "set colorcolumn=81
@@ -83,6 +84,8 @@ set directory=~/.vim-tmp/swap//
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 
+
+packadd cfilter
 
 
 " ## Vim-plug ##
@@ -146,6 +149,8 @@ Plug 'tommcdo/vim-exchange', { 'commit': 'd6c1e97' }
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 
 Plug 'dln/avro-vim', { 'commit': '3af1c69' }
+
+Plug 'spolu/dwm.vim', { 'commit': '6149e58' }
 
 if has('nvim')
     Plug 'nvim-lua/popup.nvim'
@@ -270,6 +275,13 @@ call timer_start(3000, "SyncSystemColorScheme", {"repeat": -1})
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
 
 autocmd FileType cucumber setlocal foldmethod=indent foldlevel=1
+
+
+function! NumModifiedBuffers()
+    return len(getbufinfo({'bufmodified': 1}))
+endfunction
+set titlestring=+%{NumModifiedBuffers()}
+set title
 
 " ## Notes ##
 
