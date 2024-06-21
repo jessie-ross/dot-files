@@ -288,3 +288,10 @@ set title
 " Change to current directory
 " :cd %:h
 " In netrw: c
+
+" Minimal vimscript
+" set nocompatible hidden
+" let mapleader=' '
+" let g:netrw_banner=0
+" nnoremap - :Explore
+" nnoremap <leader>fb :ls:b<space>

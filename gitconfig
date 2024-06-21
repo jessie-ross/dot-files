@@ -9,8 +9,8 @@
 [push]
 	default = current
 [pull]
-    ff = only
-    rebase = merges
+	ff = yes
+	rebase = interactive
 [alias]
     co = checkout
     cp = cherry-pick
@@ -33,3 +33,7 @@
 [status]
 	short = true
 	branch = true
+[merge]
+	ff = yes
+[advice]
+	diverging = false
