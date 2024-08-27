@@ -10,6 +10,7 @@ nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files({ hidden = 
 nnoremap <leader>faf <cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true })<cr>
 nnoremap <leader>ft :Telescope<CR>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fag <cmd>lua require('telescope.builtin').live_grep({ additional_args = { "--hidden" } })<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
@@ -29,14 +30,17 @@ lua << EOF
 local actions = require('telescope.actions')
 require('telescope').setup {
     defaults = {
-        file_sorter = require('telescope.sorters').get_fzy_sorter,
         file_ignore_patterns = {"node_modules", ".git"},
         color_devicons = true,
         mappings = {
             i = {
-                ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-                ["<C-Q>"] = actions.add_to_qflist + actions.open_qflist,
-                ["<M-Q>"] = actions.add_selected_to_qflist + actions.open_qflist,
+                ["<C-h>"] = actions.which_key,
+                ["<C-k>"] = actions.cycle_history_prev,
+                ["<C-j>"] = actions.cycle_history_next,
+                ["<up>"] = actions.move_selection_previous,
+                ["<down>"] = actions.move_selection_next,
+                ["<C-Q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+                ["<C-w>"] = actions.smart_add_to_qflist + actions.open_qflist,
             },
         }
     },

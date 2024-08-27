@@ -29,8 +29,8 @@ set clipboard=unnamed
 set winminwidth=0 winminheight=0
 set ttyfast lazyredraw
 
-set splitbelow
-set splitright
+" set splitbelow
+" set splitleft
 
 
 set scrolloff=10
@@ -86,6 +86,8 @@ set omnifunc=syntaxcomplete#Complete
 
 
 packadd cfilter
+" Replaces tpope/commentary:
+" packadd comment
 
 
 " ## Vim-plug ##
@@ -146,11 +148,20 @@ Plug 'airblade/vim-gitgutter', { 'commit': 'e801371' }
 
 Plug 'tommcdo/vim-exchange', { 'commit': 'd6c1e97' }
 
-Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
+Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'd84828b'}
 
 Plug 'dln/avro-vim', { 'commit': '3af1c69' }
 
-Plug 'spolu/dwm.vim', { 'commit': '6149e58' }
+" Plug 'spolu/dwm.vim', { 'commit': '6149e58' }
+" <c-n>     |:DWM_New|
+" <c-c>     |:DWM_Close|
+" <c-space> |:DWM_Focus|
+" <c-j>     Move cursor clockwise to the next window
+" <c-k>     Move cursor counter-clockwise to the previous window
+" <c-,>     Rotate windows counter-clockwise
+" <c-.>     Rotate windows clockwise
+" <c-h>     Grow Master Pane Width
+" <c-l>     Shrink Master Pane Width
 
 if has('nvim')
     Plug 'nvim-lua/popup.nvim'

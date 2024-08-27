@@ -118,6 +118,7 @@ alias wpcom-rsync="rsync -az --delete --delete-after \
                   --exclude '.config' \
                   --exclude '.svn' \
                   --exclude '.git' \
+                  --exclude 'node_modules' \
                   --exclude '.settings' \
                   --exclude 'wp-content/themes' \
                   --exclude 'wp-content/languages' \
@@ -135,19 +136,19 @@ alias wpcom-rsync="rsync -az --delete --delete-after \
                   --info=progress2"
 
 function mcpull () {
-    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/ ~/code-primary/missioncontrol/
+    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/ ~/code-primary/missioncontrol-00/
 }
 
 function mcpush () {
-    wpcom-rsync ~/code-primary/missioncontrol/ wpcom-sandbox:/home/missioncontrol/public_html/
+    wpcom-rsync ~/code-primary/missioncontrol-00/ wpcom-sandbox:/home/missioncontrol/public_html/
 }
 
 function wppull () {
-    wpcom-rsync wpcom-sandbox:/home/wpcom/public_html/ ~/code-primary/wpcom/
+    wpcom-rsync wpcom-sandbox:/home/wpcom/public_html/ ~/code-primary/wpcom-00/
 }
 
 function wppush () {
-    wpcom-rsync ~/code-primary/wpcom/ wpcom-sandbox:/home/wpcom/public_html/
+    wpcom-rsync ~/code-primary/wpcom-00/ wpcom-sandbox:/home/wpcom/public_html/
 }
 
 # Uploads any modified file to your sandbox
@@ -196,17 +197,17 @@ function gst () {
 }
 
 function gc () {
-    REPO="$1"
-    N="${"${2}":-0}"
-    pushd ~/code-primary/$REPO*-0$N/
+    REPO="$1" && \
+    N="${"${2}":-0}" && \
+    pushd ~/code-primary/$REPO*-0$N/ && \
     update_terminal_cwd
 }
 
 function gv () {
-    REPO="$1"
-    N="${"${2}":-0}"
-    pushd ~/code-primary/$REPO*-0$N/
-    update_terminal_cwd
+    REPO="$1" && \
+    N="${"${2}":-0}" && \
+    pushd ~/code-primary/$REPO*-0$N/ && \
+    update_terminal_cwd && \
     vim .
 }
 

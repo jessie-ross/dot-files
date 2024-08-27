@@ -81,7 +81,7 @@ volta run npm install --quiet -g \
   pyright
 
 # Java as recommended by Clojure:
-brew install --cask temurin@21
+# brew install --cask temurin@21
 
 # Rust
 rustup-init -y
@@ -122,6 +122,11 @@ then
 EOF
 	launchctl load me.scjr.CapslockBackspace.plist
 fi
+
+# Enable firewall
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw \
+  --setglobalstate on \
+  --setstealthmode on
 
 # Require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
