@@ -30,7 +30,8 @@ fi
 # 	slack \
 # 	texts \
 # 	textual \
-# 	zoom
+# 	zoom \
+# 	zotero
 
 # Install dropbox for alfred + dash preferences
 

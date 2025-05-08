@@ -105,87 +105,10 @@ cdf() {
     cd "$target"
 }
 
-alias vsetup='( cd ~/code-personal/dot-files/ && v ./setup.sh && ./setup.sh )'
-alias vzshrc='v ~/code-personal/dot-files/zshrc.main && source ~/code-personal/dot-files/zshrc.main'
+alias vsetup='( cd ~/code-personal/dot-files-00/ && v ./setup.sh && ./setup.sh )'
+alias vzshrc='v ~/code-personal/dot-files-00/zshrc.main && source ~/code-personal/dot-files-00/zshrc.main'
 alias vzshrcl='v ~/.zshrc && source ~/.zshrc'
 
-
-#
-# A8C Specific (non-sensitive):
-# 
-
-alias wpcom-rsync="rsync -az --delete --delete-after \
-                  --exclude '.config' \
-                  --exclude '.svn' \
-                  --exclude '.git' \
-                  --exclude 'node_modules' \
-                  --exclude '.settings' \
-                  --exclude 'wp-content/themes' \
-                  --exclude 'wp-content/languages' \
-                  --exclude '*.png' \
-                  --exclude '*.jpeg' \
-                  --exclude '*.jpg' \
-                  --exclude '*.gif' \
-                  --exclude '*.mp3' \
-                  --exclude '*.mov' \
-                  --exclude '*.wav' \
-                  --exclude '*.tiff' \
-                  --exclude '.tags.*' \
-                  --exclude '.tags*' \
-                  --exclude '.tags' \
-                  --info=progress2"
-
-function mcpull () {
-    wpcom-rsync wpcom-sandbox:/home/missioncontrol/public_html/ ~/code-primary/missioncontrol-00/
-}
-
-function mcpush () {
-    wpcom-rsync ~/code-primary/missioncontrol-00/ wpcom-sandbox:/home/missioncontrol/public_html/
-}
-
-function wppull () {
-    wpcom-rsync wpcom-sandbox:/home/wpcom/public_html/ ~/code-primary/wpcom-00/
-}
-
-function wppush () {
-    wpcom-rsync ~/code-primary/wpcom-00/ wpcom-sandbox:/home/wpcom/public_html/
-}
-
-# Uploads any modified file to your sandbox
-function wpwatch () {
-	# path to your local copy of public_html folder
-	WORKDIR=~/code-primary/wpcom
-	SANDBOX="wpcom-sandbox"
-
-	echo "Watching for changes on $WORKDIR"
-	start=0
-
-	current_OS=`uname`
-
-	if [[ $current_OS == "Darwin" ]]; then
-		fswatch -x $WORKDIR |
-		while read filepath flag1 flag2 flag3 flag4; do
-			now="$(date +"%s")"
-			if (( now-start > 2 )); then
-				relpath=${filepath#"$WORKDIR"}
-				echo "Uploading $relpath ... "
-				scp $filepath $SANDBOX:~/public_html$relpath
-				start="$(date +"%s")"
-			fi
-		done
-	else
-		inotifywait -rm $WORKDIR -e create,modify,move |
-		while read path action file; do
-			now="$(date +"%s")"
-			if (( now-start > 2 )); then
-				relpath=${path#"$WORKDIR"}
-				echo "Uploading $relpath$file ... "
-				scp $path$file $SANDBOX:~/public_html$relpath$file
-				start="$(date +"%s")"
-			fi
-		done
-	fi
-}
 
 function gst () {
 	echo "-------------------"
@@ -210,7 +133,3 @@ function gv () {
     update_terminal_cwd && \
     vim .
 }
-
-HADOOP_PROXY_DOCKER_RUN_EXTRA_ARGS="--mount type=bind,src="${HOME}/.bash_aliases",dst=/home/remote-user/.bash_aliases,readonly"
-
-PIPENV_CMD="pipx run pipenv"

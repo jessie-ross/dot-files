@@ -215,6 +215,9 @@ nnoremap <leader>Y gg"+yG<C-o>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" Terminal mode
+tnoremap <Esc> <C-\><C-n>
+
 " Git
 nnoremap <leader>gg :Git<CR>
 nnoremap <leader>gv :GV<CR>
