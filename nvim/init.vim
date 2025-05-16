@@ -3,7 +3,6 @@ let &packpath = &runtimepath
 source ~/.vimrc
 
 
-
 " ## Telescope ##
 
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>
@@ -231,23 +230,30 @@ EOF
 " Disable diagnostics:
 " :lua vim.diagnostic.config({virtual_text = false})
 
-
-" ## Treesitter ##
-" Disabled because it is broken 🙄
+" ## vim term ##
 
 lua << EOF
--- require'nvim-treesitter.configs'.setup {
---   ensure_installed = { "javascript", "bash", "php", "java", "clojure", "elixir", "erlang", "json", "lua", "make", "php", "python", "typescript", "vim", "yaml" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
---   -- ignore_install = { "javascript" }, -- List of parsers to ignore installing
---   highlight = {
---     enable = true,              -- false will disable the whole extension
---     -- disable = { "c", "rust" },  -- list of language that will be disabled
---     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
---     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
---     -- Using this option may slow down your editor, and you may see some duplicate highlights.
---     -- Instead of true it can also be a list of languages
---     -- additional_vim_regex_highlighting = false,
---   },
---   indent = { enable = true },
--- }
+local vtok, vimterm = pcall(require, 'vimterm')
+if vtok then
+    vimterm.setup({
+      termwinkey = '<C-w>',
+      autoclose = true,
+      autostartinsert = true,
+      abbrevhack = false
+      })
+
+    -- :term -> :below Sterm
+    vim.keymap.set(
+        'ca',
+        'term',
+        "getcmdtype() is ':' && getcmdline() =~# '^term' && getcmdpos() is 5 ? 'below Sterm' : 'term'",
+        { expr=true })
+
+    -- :vterm
+    vim.keymap.set(
+        'ca',
+        'vterm',
+        "getcmdtype() is ':' && getcmdline() =~# '^vterm' && getcmdpos() is 6 ? 'vert Sterm' : 'vterm'",
+        { expr=true })
+end
 EOF

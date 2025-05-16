@@ -152,6 +152,8 @@ Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'd84828
 
 Plug 'dln/avro-vim', { 'commit': '3af1c69' }
 
+Plug 'VioletJewel/vimterm.nvim', { 'commit': 'c77ee22' }
+
 " Plug 'spolu/dwm.vim', { 'commit': '6149e58' }
 " <c-n>     |:DWM_New|
 " <c-c>     |:DWM_Close|
