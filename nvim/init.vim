@@ -124,42 +124,42 @@ local ts_utils_settings = {
 local flags = { debounce_text_changes = 150, }
 
 -- sudo npm install -g typescript typescript-language-server diagnostic-languageserver eslint_d
-lspconfig.tsserver.setup({
-    -- cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/usr/local/bin/tsserver-wrapper" },
-    flags,
-    on_attach = function(client, bufnr)
-        client.server_capabilities.document_formatting = false
-        on_attach(client, bufnr)
-
-        ts_utils.setup(ts_utils_settings)
-        ts_utils.setup_client(client)
-
-        -- Mappings.
-        local opts = { noremap=true, silent=true }
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgs', ':TSLspOrganize<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgI', ':TSLspRenameFile<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgo', ':TSLspImportAll<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>qq', ':TSLspFixCurrent<CR>', opts)
-    end,
-})
+-- lspconfig.tsserver.setup({
+--     -- cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/usr/local/bin/tsserver-wrapper" },
+--     flags,
+--     on_attach = function(client, bufnr)
+--         client.server_capabilities.document_formatting = false
+--         on_attach(client, bufnr)
+-- 
+--         ts_utils.setup(ts_utils_settings)
+--         ts_utils.setup_client(client)
+-- 
+--         -- Mappings.
+--         local opts = { noremap=true, silent=true }
+--         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgs', ':TSLspOrganize<CR>', opts)
+--         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgI', ':TSLspRenameFile<CR>', opts)
+--         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgo', ':TSLspImportAll<CR>', opts)
+--         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>qq', ':TSLspFixCurrent<CR>', opts)
+--     end,
+-- })
 
 -- npm install -g pyright
-lspconfig.pyright.setup({
-settings = {
-    python = {
-        analysis = {
-            autoSearchPaths = true,
-            useLibraryCodeForTypes = true,
-            diagnosticMode = 'openFilesOnly',
-        },
-        venvPath = vim.env.VIRTUAL_ENV
-    }
-    },
-    flags,
-    on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-    end,
-})
+-- lspconfig.pyright.setup({
+-- settings = {
+--     python = {
+--         analysis = {
+--             autoSearchPaths = true,
+--             useLibraryCodeForTypes = true,
+--             diagnosticMode = 'openFilesOnly',
+--         },
+--         venvPath = vim.env.VIRTUAL_ENV
+--     }
+--     },
+--     flags,
+--     on_attach = function(client, bufnr)
+--         on_attach(client, bufnr)
+--     end,
+-- })
 
 
 -- nvim-metals
@@ -197,33 +197,33 @@ settings = {
 -- })
 
 -- Don't have a binary for this yet
-lspconfig.lua_ls.setup {
-    -- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
-    on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-    end,
-    settings = {
-        Lua = {
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT',
-                -- Setup your lua path
-                path = vim.split(package.path, ';'),
-            },
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = {'vim'},
-            },
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                library = {
-                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-                },
-            },
-        },
-    },
-}
+-- lspconfig.lua_ls.setup {
+--     -- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+--     on_attach = function(client, bufnr)
+--         on_attach(client, bufnr)
+--     end,
+--     settings = {
+--         Lua = {
+--             runtime = {
+--                 -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+--                 version = 'LuaJIT',
+--                 -- Setup your lua path
+--                 path = vim.split(package.path, ';'),
+--             },
+--             diagnostics = {
+--                 -- Get the language server to recognize the `vim` global
+--                 globals = {'vim'},
+--             },
+--             workspace = {
+--                 -- Make the server aware of Neovim runtime files
+--                 library = {
+--                     [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+--                     [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+--                 },
+--             },
+--         },
+--     },
+-- }
 EOF
 
 

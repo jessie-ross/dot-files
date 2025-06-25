@@ -127,7 +127,6 @@ Plug 'tpope/vim-repeat' " make repeat work with other things
 Plug 'tpope/vim-rhubarb' " github
 Plug 'tpope/vim-rsi' " readline shortcuts
 Plug 'tpope/vim-scriptease' " vim plugin creation tools
-" Plug 'tpope/vim-sexp-mappings-for-regular-people' 
 Plug 'tpope/vim-sleuth' " guess file tab/spaces
 Plug 'tpope/vim-surround' " dealing with quotes and brackets
 Plug 'tpope/vim-unimpaired' " yox and [x ]x
@@ -137,8 +136,47 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/seoul256.vim'
 
+" Clojure/LISP
+" TODO: clojure-lsp
+" TODO: ale_linters
 Plug 'guns/vim-sexp', { 'commit': '14464d4' }
+" text-objects:
+" compound-forms: af if
+" top-level-compound-forms: aF iF
+" string: as is
+" element: ae ie
+"
+" motions:
+" adjacent-top-level element: [[ ]]
+" adjacent-element: [e ]e
+"
+" ,h ,l head and tail
+"
+" wrapping:
+" () ,i ,I
+" [] ,[ ,]
+" {} ,{ ,}
+" (e) ,W ,w
+" [e] ,e[ ,e]
+" {e} ,e[ ,e]
+"
+" list-manip:
+" ,@ splice the compound into its parent
+" ,o raises the current compound form to replace enclosing compound form
+" ,O raises the current element to replace the enclosing compound form
+Plug 'tpope/vim-sexp-mappings-for-regular-people' 
+" moving-element-wise: W B E gE
+" move-form: >f <f
+" move-element: >e <e
+" slurpage/barfage: >) <( >( <)
+Plug 'luochen1990/rainbow', { 'commit': '76ca1a2' }
+Plug 'gberenfield/cljfold.vim', { 'commit': 'ebc537d' } " g:clojure_foldwords
+Plug 'Olical/conjure'
+" ,ef evaluate file
+" ,er evaluate root under cursor
+" ,lv
 
 " https://github.com/NLKNguyen/papercolor-theme
 Plug 'NLKNguyen/papercolor-theme', { 'commit': '0cfe64f' }
@@ -148,7 +186,7 @@ Plug 'airblade/vim-gitgutter', { 'commit': 'e801371' }
 
 Plug 'tommcdo/vim-exchange', { 'commit': 'd6c1e97' }
 
-Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'd84828b'}
+" Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'd84828b'}
 
 Plug 'dln/avro-vim', { 'commit': '3af1c69' }
 
@@ -186,6 +224,7 @@ call plug#end()
 
 " ## Plugin config ##
 
+let g:rainbow_active = 1
 
 let g:goyo_width=130
 
@@ -198,12 +237,13 @@ au BufRead,BufNewFile *.avdl setlocal filetype=avro-idl
 " ## Theming ##
 
 syntax enable
-colorscheme PaperColor
+colorscheme seoul256
 
 
 " ## Custom and mapping ##
 
 let mapleader = ' '
+let maplocalleader = ','
 
 " Editing
 vnoremap <leader>p "_dP
@@ -272,12 +312,15 @@ nmap <leader>wp :call WPComTrunkSaveSendAndTest()<CR>
 " Use system dark/light mode on Mac
 function! SyncSystemColorScheme(...)
     let s:new_bg = "light"
+    let s:new_colorscheme = "light"
     if $TERM_PROGRAM ==? "Apple_Terminal"
         let s:mode = systemlist("defaults read -g AppleInterfaceStyle 2&>/dev/null || echo Light")[0]
         if s:mode ==? "Dark"
             let s:new_bg = "dark"
+            let s:new_colorscheme = "seoul256-dark"
         else
             let s:new_bg = "light"
+            let s:new_colorscheme = "seoul256-light"
         endif
     endif
     if &background !=? s:new_bg
@@ -285,7 +328,7 @@ function! SyncSystemColorScheme(...)
     endif
 endfunction
 call SyncSystemColorScheme()
-call timer_start(3000, "SyncSystemColorScheme", {"repeat": -1})
+" call timer_start(3000, "SyncSystemColorScheme", {"repeat": -1})
 
 
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>

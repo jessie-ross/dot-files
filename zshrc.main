@@ -88,7 +88,7 @@ function zarv() {
 }
 
 function cac() {
-	DIRS="$(find ~/code-primary -name "$(echo "$*" | tr ' ' '*')*" -maxdepth 1 -type d)"
+	DIRS="$(find ~/code-personal -name "$(echo "$*" | tr ' ' '*')*" -maxdepth 1 -type d)"
 	echo "$DIRS"
 	echo -n ':'
 	read -k 1 LNO
@@ -112,7 +112,7 @@ alias vzshrcl='v ~/.zshrc && source ~/.zshrc'
 
 function gst () {
 	echo "-------------------"
-	for P in ~/code-primary/"$1"*; do
+	for P in ~/code-personal/"$1"*; do
 		echo "# $P:"
 		git --git-dir="$P/.git" --work-tree="$P" status
 		echo "-------------------"
@@ -122,14 +122,14 @@ function gst () {
 function gc () {
     REPO="$1" && \
     N="${"${2}":-0}" && \
-    pushd ~/code-primary/$REPO*-0$N/ && \
+    pushd ~/code-personal/$REPO*-0$N/ && \
     update_terminal_cwd
 }
 
 function gv () {
     REPO="$1" && \
     N="${"${2}":-0}" && \
-    pushd ~/code-primary/$REPO*-0$N/ && \
+    pushd ~/code-personal/$REPO*-0$N/ && \
     update_terminal_cwd && \
     vim .
 }
