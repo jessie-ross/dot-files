@@ -29,8 +29,8 @@ set clipboard=unnamed
 set winminwidth=0 winminheight=0
 set ttyfast lazyredraw
 
-" set splitbelow
-" set splitleft
+set splitbelow
+set splitright
 
 
 set scrolloff=10
@@ -38,7 +38,7 @@ set scrolloff=10
 
 set cursorline
 
-set background=light
+" set background=light
 set noshowmode 
 set showcmd
 set showtabline=1
@@ -80,6 +80,20 @@ endif
 " editor get confused
 set backupskip=/tmp/*,/private/tmp/*
 set directory=~/.vim-tmp/swap//
+
+" Editing secrets:
+function! SecretsMode ()
+    setlocal history=0
+    setlocal nobackup
+    setlocal nomodeline
+    setlocal noshelltemp
+    setlocal noswapfile
+    setlocal noundofile
+    setlocal nowritebackup
+    setlocal viminfo=""
+endfunction
+
+au BufRead *.sops.yaml call SecretsMode()
 
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
@@ -186,7 +200,7 @@ Plug 'airblade/vim-gitgutter', { 'commit': 'e801371' }
 
 Plug 'tommcdo/vim-exchange', { 'commit': 'd6c1e97' }
 
-" Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'd84828b'}
+Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'afe6b11'}
 
 Plug 'dln/avro-vim', { 'commit': '3af1c69' }
 
@@ -230,6 +244,9 @@ let g:goyo_width=130
 
 let g:bookmark_save_per_working_dir = 1
 let g:bookmark_sign = '♥'
+
+" To make compatible with parinfer
+let g:sexp_enable_insert_mode_mappings = 0
 
 " avro-vim
 au BufRead,BufNewFile *.avdl setlocal filetype=avro-idl
