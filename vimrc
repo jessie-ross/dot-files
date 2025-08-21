@@ -155,6 +155,7 @@ Plug 'junegunn/seoul256.vim'
 " Clojure/LISP
 " TODO: clojure-lsp
 " TODO: ale_linters
+Plug 'dense-analysis/ale', { 'commit': '4b1bf3e' }
 Plug 'guns/vim-sexp', { 'commit': '14464d4' }
 " text-objects:
 " compound-forms: af if
@@ -188,6 +189,7 @@ Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'luochen1990/rainbow', { 'commit': '76ca1a2' }
 Plug 'gberenfield/cljfold.vim', { 'commit': 'ebc537d' } " g:clojure_foldwords
 Plug 'Olical/conjure'
+Plug 'Olical/nfnl'
 " ,ef evaluate file
 " ,er evaluate root under cursor
 " ,lv
@@ -199,8 +201,6 @@ Plug 'NLKNguyen/papercolor-theme', { 'commit': '0cfe64f' }
 Plug 'airblade/vim-gitgutter', { 'commit': 'e801371' }
 
 Plug 'tommcdo/vim-exchange', { 'commit': 'd6c1e97' }
-
-Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'afe6b11'}
 
 Plug 'dln/avro-vim', { 'commit': '3af1c69' }
 
@@ -227,6 +227,8 @@ if has('nvim')
     " TODO: Replace
     Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', { 'commit': '0a6a16e' }
 
+    Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release', 'commit': 'afe6b11'}
+
     " This isreaking for some reason
     " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     " Plug 'nvim-treesitter/playground'
@@ -250,6 +252,10 @@ let g:sexp_enable_insert_mode_mappings = 0
 
 " avro-vim
 au BufRead,BufNewFile *.avdl setlocal filetype=avro-idl
+
+let g:ale_linters = {'clojure': ['clj-kondo']}
+
+let g:clojure_foldwords = "def,ns,comment,extend"
 
 " ## Theming ##
 

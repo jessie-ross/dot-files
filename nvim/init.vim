@@ -25,6 +25,11 @@ nnoremap <leader>gb <cmd>lua require('telescope.builtin').git_branches()<cr>
 " - `<cr>`: opens the currently selected file
 nnoremap <leader>gs <cmd>lua require('telescope.builtin').git_status()<cr>
 
+nnoremap <leader>gr <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <leader>dd <cmd>lua vim.diagnostic.open_float()<CR>
+nnoremap <leader>dl <cmd>lua vim.diagnostic.setloclist()<CR>
+nnoremap <leader>dq <cmd>lua vim.diagnostic.setqflist()<CR>
+
 lua << EOF
 local actions = require('telescope.actions')
 require('telescope').setup {
